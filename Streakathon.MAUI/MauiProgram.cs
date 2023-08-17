@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
+using Refit;
 using Streakathon.MAUI.Entities.Streaks;
+using Streakathon.MAUI.Entities.Streaks.Data;
 using Streakathon.MAUI.Pages;
 
 namespace Streakathon.MAUI;
@@ -30,6 +32,15 @@ public static class MauiProgram
 
         services.AddTransient<AddStreakViewModel>();
         services.AddTransient<AddStreakView>();
+
+		services.AddRefitClient<IGetAllStreaksQuery>().ConfigureHttpClient(c =>
+		{
+			c.BaseAddress = new Uri("https://firestore.googleapis.com/v1/projects/streakathon/databases/(default)/documents");
+        });
+        services.AddRefitClient<IGetStreakEntriesQuery>().ConfigureHttpClient(c =>
+        {
+            c.BaseAddress = new Uri("https://firestore.googleapis.com/v1/projects/streakathon/databases/(default)/documents");
+        });
 
         return builder.Build();
 	}
