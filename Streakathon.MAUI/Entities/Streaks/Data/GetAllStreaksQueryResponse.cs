@@ -23,18 +23,8 @@ namespace Streakathon.MAUI.Entities.Streaks.Data
         public FirestoreQueryStringFieldResponse Description { get; set; }
     }
 
-    public class GetStreakEntriesQueryFieldsResponse
-    {
-        public FirestoreQueryTimestampFieldResponse Created { get; set; }
-    }
-
     public class FirestoreQueryStringFieldResponse
     {
         public string StringValue { get; set; }
-    }
-
-    public class FirestoreQueryTimestampFieldResponse
-    {
-        public DateTime TimestampValue { get; set; }
     }
 }

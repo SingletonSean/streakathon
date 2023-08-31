@@ -12,7 +12,7 @@ namespace Streakathon.MAUI.Pages
     {
         private readonly StreakStore _streakStore;
         private readonly IGetAllStreaksQuery _getAllStreaksQuery;
-        private readonly IGetStreakEntriesQuery _getStreakEntriesQuery;
+        private readonly IGetAllStreakEntriesQuery _getAllStreakEntriesQuery;
         private readonly ObservableCollection<StreakOverviewViewModel> _streakOverviewViewModels;
 
         public IEnumerable<StreakOverviewViewModel> StreakOverviewViewModels => _streakOverviewViewModels;
@@ -20,11 +20,11 @@ namespace Streakathon.MAUI.Pages
         public HomeViewModel(
             StreakStore streakStore, 
             IGetAllStreaksQuery getAllStreaksQuery,
-            IGetStreakEntriesQuery getStreakEntriesQuery)
+            IGetAllStreakEntriesQuery getAllStreakEntriesQuery)
         {
             _streakStore = streakStore;
             _getAllStreaksQuery = getAllStreaksQuery;
-            _getStreakEntriesQuery = getStreakEntriesQuery;
+            _getAllStreakEntriesQuery = getAllStreakEntriesQuery;
 
             _streakOverviewViewModels = new ObservableCollection<StreakOverviewViewModel>();
 
@@ -46,21 +46,18 @@ namespace Streakathon.MAUI.Pages
                     Title = d.Fields.Title.StringValue,
                     Description = d.Fields.Description.StringValue,
                 }).ToList();
-                
-                IEnumerable<StreakEntry>[] streakEntryResponses = await Task.WhenAll(streaks.Select(async s =>
-                {
-                    FirestoreQueryResponse<GetStreakEntriesQueryFieldsResponse> entriesResponse = 
-                        await _getStreakEntriesQuery.Execute(s.Id);
 
-                    return entriesResponse
-                        .Documents
-                        .Select(d => new StreakEntry(d.Fields.Created.TimestampValue));
-                }));
+                IEnumerable<StreakEntryDocumentResponse> streakEntriesResponse = await _getAllStreakEntriesQuery.Execute(new Request());
 
-                for (int i = 0; i < streaks.Count(); i++)
+                ILookup<string, StreakEntry> streakEntriesLookup = streakEntriesResponse
+                    .Select(s => new StreakEntry(s.StreakEntryId, s.StreakId, s.Document.Fields.Created.TimestampValue))
+                    .ToLookup(s => s.StreakId);
+
+                foreach (Streak streak in streaks)
                 {
-                    Streak currentStreak = streaks.ElementAt(i);
-                    currentStreak.ResetEntries(streakEntryResponses[i]);
+                    IEnumerable<StreakEntry> entries = streakEntriesLookup[streak.Id];
+
+                    streak.ResetEntries(entries);
                 }
 
                 _streakStore.Reset(streaks);

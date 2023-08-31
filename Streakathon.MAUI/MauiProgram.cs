@@ -37,9 +37,9 @@ public static class MauiProgram
 		{
 			c.BaseAddress = new Uri("https://firestore.googleapis.com/v1/projects/streakathon/databases/(default)/documents");
         });
-        services.AddRefitClient<IGetStreakEntriesQuery>().ConfigureHttpClient(c =>
+        services.AddRefitClient<IGetAllStreakEntriesQuery>().ConfigureHttpClient(c =>
         {
-            c.BaseAddress = new Uri("https://firestore.googleapis.com/v1/projects/streakathon/databases/(default)/documents");
+            c.BaseAddress = new Uri("https://firestore.googleapis.com/v1/projects/streakathon/databases/(default)");
         });
 
         return builder.Build();
