@@ -18,6 +18,9 @@ namespace Streakathon.MAUI.Pages
 
         public IEnumerable<StreakOverviewViewModel> StreakOverviewViewModels => _streakOverviewViewModels;
 
+        [ObservableProperty]
+        private bool _isLoading;
+
         public HomeViewModel(
             StreakStore streakStore, 
             IGetAllStreaksQuery getAllStreaksQuery,
@@ -37,6 +40,8 @@ namespace Streakathon.MAUI.Pages
         [RelayCommand]
         private async Task LoadStreaks()
         {
+            IsLoading = true;
+
             try
             {
                 GetAllStreaksQueryResponse streaksResponse = await _getAllStreaksQuery.Execute();
@@ -82,6 +87,10 @@ namespace Streakathon.MAUI.Pages
             catch (Exception)
             {
                 await Shell.Current.DisplayAlert("Error", "Failed to load streaks.", "Ok");
+            } 
+            finally
+            {
+                IsLoading = false;
             }
         }
 
