@@ -27,7 +27,8 @@ namespace Streakathon.MAUI.Pages
                 Title = Title,
                 Description = Description
             };
-            _streakStore.Add(streak);
+
+            await _streakStore.Create(streak);
 
             await Shell.Current.GoToAsync("//Home");
 

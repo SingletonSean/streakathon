@@ -1,23 +1,43 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
+using Streakathon.MAUI.Entities.Streaks.Data;
 
 namespace Streakathon.MAUI.Entities.Streaks
 {
     public class StreakStore
     {
+        private readonly ICreateStreakCommand _createStreakCommand;
         private readonly List<Streak> _streaks;
 
         public IEnumerable<Streak> Streaks => _streaks;
 
-        public StreakStore()
+        public StreakStore(ICreateStreakCommand createStreakCommand)
         {
+            _createStreakCommand = createStreakCommand;
+
             _streaks = new List<Streak>();
         }
 
-        public void Add(Streak streak)
+        public async Task Create(Streak newStreak)
         {
-            _streaks.Add(streak);
+            FirestoreQueryDocumentResponse<GetAllStreaksQueryFieldsResponse> createdStreakResponse = 
+                await _createStreakCommand.Execute(new FirestoreQueryDocumentResponse<GetAllStreaksQueryFieldsResponse>()
+                {
+                    Fields = new GetAllStreaksQueryFieldsResponse()
+                    {
+                        Title = new FirestoreQueryStringFieldResponse()
+                        {
+                            StringValue = newStreak.Title
+                        },
+                        Description = new FirestoreQueryStringFieldResponse()
+                        {
+                            StringValue = newStreak.Description
+                        }
+                    }
+                });
 
-            StrongReferenceMessenger.Default.Send(new StreakAddedMessage(streak));
+            _streaks.Add(newStreak);
+
+            StrongReferenceMessenger.Default.Send(new StreakAddedMessage(newStreak));
         }
 
         public void Reset(IEnumerable<Streak> streaks)
