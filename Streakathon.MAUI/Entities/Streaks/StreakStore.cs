@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
 using Streakathon.MAUI.Entities.Streaks.Data;
+using Streakathon.MAUI.Shared.Firestore;
 
 namespace Streakathon.MAUI.Entities.Streaks
 {
@@ -19,16 +20,16 @@ namespace Streakathon.MAUI.Entities.Streaks
 
         public async Task Create(Streak newStreak)
         {
-            FirestoreQueryDocumentResponse<GetAllStreaksQueryFieldsResponse> createdStreakResponse = 
-                await _createStreakCommand.Execute(new FirestoreQueryDocumentResponse<GetAllStreaksQueryFieldsResponse>()
+            CreateStreakCommandResponse createdStreakResponse = 
+                await _createStreakCommand.Execute(new CreateStreakCommandRequest()
                 {
-                    Fields = new GetAllStreaksQueryFieldsResponse()
+                    Fields = new FirestoreStreakFields()
                     {
-                        Title = new FirestoreQueryStringFieldResponse()
+                        Title = new FirestoreStringField()
                         {
                             StringValue = newStreak.Title
                         },
-                        Description = new FirestoreQueryStringFieldResponse()
+                        Description = new FirestoreStringField()
                         {
                             StringValue = newStreak.Description
                         }

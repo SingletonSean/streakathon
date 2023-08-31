@@ -1,15 +1,15 @@
 ﻿using Refit;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Streakathon.MAUI.Shared.Firestore;
 
 namespace Streakathon.MAUI.Entities.Streaks.Data
 {
     public interface ICreateStreakCommand
     {
         [Post("/streaks")]
-        Task<FirestoreQueryDocumentResponse<GetAllStreaksQueryFieldsResponse>> Execute([Body] FirestoreQueryDocumentResponse<GetAllStreaksQueryFieldsResponse> request);
+        Task<CreateStreakCommandResponse> Execute([Body] CreateStreakCommandRequest request);
     }
+
+    public class CreateStreakCommandRequest : FirestoreDocument<FirestoreStreakFields> { }
+
+    public class CreateStreakCommandResponse : FirestoreDocument<FirestoreStreakFields> { }
 }

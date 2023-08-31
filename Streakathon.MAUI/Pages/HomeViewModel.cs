@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Refit;
 using Streakathon.MAUI.Entities.Streaks;
 using Streakathon.MAUI.Entities.Streaks.Data;
+using Streakathon.MAUI.Shared.Firestore;
 using System.Collections.ObjectModel;
 
 namespace Streakathon.MAUI.Pages
@@ -38,7 +39,7 @@ namespace Streakathon.MAUI.Pages
         {
             try
             {
-                FirestoreQueryResponse<GetAllStreaksQueryFieldsResponse> streaksResponse = await _getAllStreaksQuery.Execute();
+                GetAllStreaksQueryResponse streaksResponse = await _getAllStreaksQuery.Execute();
 
                 IEnumerable<Streak> streaks = streaksResponse.Documents.Select(d => new Streak()
                 {
@@ -47,7 +48,21 @@ namespace Streakathon.MAUI.Pages
                     Description = d.Fields.Description.StringValue,
                 }).ToList();
 
-                IEnumerable<StreakEntryDocumentResponse> streakEntriesResponse = await _getAllStreakEntriesQuery.Execute(new Request());
+                IEnumerable<StreakEntryCollectionGroupItem> streakEntriesResponse = await _getAllStreakEntriesQuery.Execute(
+                    new FirestoreRunQueryRequest()
+                    {
+                        StructuredQuery = new FirestoreStructuredQuery()
+                        {
+                            From = new List<FirestoreFromItem>()
+                            {
+                                new FirestoreFromItem()
+                                {
+                                    CollectionId = "entries",
+                                    AllDescendants = true
+                                }
+                            }
+                        }
+                    });
 
                 ILookup<string, StreakEntry> streakEntriesLookup = streakEntriesResponse
                     .Select(s => new StreakEntry(s.StreakEntryId, s.StreakId, s.Document.Fields.Created.TimestampValue))
