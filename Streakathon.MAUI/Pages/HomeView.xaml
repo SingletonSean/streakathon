@@ -2,7 +2,14 @@
 <ContentPage
     x:Class="Streakathon.MAUI.Pages.HomeView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:shared="clr-namespace:Streakathon.MAUI.Shared.Converters">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <shared:InverseBooleanToOpacityConverter x:Key="InverseBooleanToOpacityConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <VerticalStackLayout Padding="20" MaximumWidthRequest="800">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -33,8 +40,10 @@
 
         <CollectionView
             Margin="0,20,0,0"
+            HorizontalOptions="FillAndExpand"
             ItemsLayout="VerticalGrid, 2"
-            ItemsSource="{Binding StreakOverviewViewModels}">
+            ItemsSource="{Binding StreakOverviewViewModels}"
+            Opacity="{Binding IsLoading, Converter={StaticResource InverseBooleanToOpacityConverter}}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Border

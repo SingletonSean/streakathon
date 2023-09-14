@@ -13,6 +13,9 @@ namespace Streakathon.MAUI.Pages
 
         [ObservableProperty]
         private string _description;
+        
+        [ObservableProperty]
+        private bool _isLoading;
 
         public AddStreakViewModel(StreakStore streakStore)
         {
@@ -22,13 +25,26 @@ namespace Streakathon.MAUI.Pages
         [RelayCommand]
         private async Task SubmitStreak()
         {
-            NewStreak streak = new NewStreak(Title, Description);
-            await _streakStore.Create(streak);
+            IsLoading = true;
 
-            await Shell.Current.GoToAsync("//Home");
+            try 
+            { 
+                NewStreak streak = new NewStreak(Title, Description);
+                await _streakStore.Create(streak);
 
-            Title = string.Empty;
-            Description = string.Empty;
+                await Shell.Current.GoToAsync("//Home");
+
+                Title = string.Empty;
+                Description = string.Empty;
+            } 
+            catch (Exception)
+            {
+                await Shell.Current.DisplayAlert("Error", "Failed to create streak. Please try again later.", "Ok");
+            } 
+            finally
+            {
+                IsLoading = false;
+            }
         }
     }
 }

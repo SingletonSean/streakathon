@@ -12,7 +12,6 @@ namespace Streakathon.MAUI.Pages
     public partial class HomeViewModel : ObservableObject
     {
         private readonly StreakStore _streakStore;
-        private readonly GetAllStreaksQuery _getAllStreaksQuery;
         private readonly ObservableCollection<StreakOverviewViewModel> _streakOverviewViewModels;
 
         public IEnumerable<StreakOverviewViewModel> StreakOverviewViewModels => _streakOverviewViewModels;
@@ -20,10 +19,9 @@ namespace Streakathon.MAUI.Pages
         [ObservableProperty]
         private bool _isLoading;
 
-        public HomeViewModel(StreakStore streakStore, GetAllStreaksQuery getAllStreaksQuery)
+        public HomeViewModel(StreakStore streakStore)
         {
             _streakStore = streakStore;
-            _getAllStreaksQuery = getAllStreaksQuery;
             _streakOverviewViewModels = new ObservableCollection<StreakOverviewViewModel>();
 
             StrongReferenceMessenger.Default.Register<StreakAddedMessage>(this, OnStreakAdded);
@@ -44,7 +42,7 @@ namespace Streakathon.MAUI.Pages
             } 
             catch (Exception)
             {
-                await Shell.Current.DisplayAlert("Error", "Failed to load streaks.", "Ok");
+                await Shell.Current.DisplayAlert("Error", "Failed to load streaks. Please try again later.", "Ok");
             } 
             finally
             {

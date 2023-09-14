@@ -28,6 +28,12 @@
                 Command="{Binding SubmitStreakCommand}"
                 FontAttributes="Bold"
                 Text="Submit" />
+
+            <ActivityIndicator
+                Margin="0,20,0,0"
+                IsRunning="{Binding IsLoading}"
+                IsVisible="{Binding IsLoading}"
+                VerticalOptions="Center" />
         </VerticalStackLayout>
     </VerticalStackLayout>
 </ContentPage>
