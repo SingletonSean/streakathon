@@ -11,5 +11,8 @@ namespace Streakathon.MAUI.Entities.Streaks.Data
 
     public class CreateStreakCommandRequest : FirestoreDocument<FirestoreStreakFields> { }
 
-    public class CreateStreakCommandResponse : FirestoreDocument<FirestoreStreakFields> { }
+    public class CreateStreakCommandResponse : FirestoreDocument<FirestoreStreakFields> 
+    {
+        public string Id => Name?.Split("/")?.LastOrDefault();
+    }
 }

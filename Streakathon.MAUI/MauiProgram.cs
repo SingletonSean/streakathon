@@ -25,9 +25,11 @@ public static class MauiProgram
 
         IServiceCollection services = builder.Services;
 
+		services.AddSingleton<GetAllStreaksQuery>();
+		services.AddSingleton<CreateStreakCommand>();
 		services.AddSingleton<StreakStore>();
 
-		services.AddTransient<HomeViewModel>();
+        services.AddTransient<HomeViewModel>();
 		services.AddTransient<HomeView>();
 
         services.AddTransient<AddStreakViewModel>();

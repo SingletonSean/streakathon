@@ -12,8 +12,7 @@ namespace Streakathon.MAUI.Pages
     public partial class HomeViewModel : ObservableObject
     {
         private readonly StreakStore _streakStore;
-        private readonly IGetAllStreaksQuery _getAllStreaksQuery;
-        private readonly IGetAllStreakEntriesQuery _getAllStreakEntriesQuery;
+        private readonly GetAllStreaksQuery _getAllStreaksQuery;
         private readonly ObservableCollection<StreakOverviewViewModel> _streakOverviewViewModels;
 
         public IEnumerable<StreakOverviewViewModel> StreakOverviewViewModels => _streakOverviewViewModels;
@@ -21,15 +20,10 @@ namespace Streakathon.MAUI.Pages
         [ObservableProperty]
         private bool _isLoading;
 
-        public HomeViewModel(
-            StreakStore streakStore, 
-            IGetAllStreaksQuery getAllStreaksQuery,
-            IGetAllStreakEntriesQuery getAllStreakEntriesQuery)
+        public HomeViewModel(StreakStore streakStore, GetAllStreaksQuery getAllStreaksQuery)
         {
             _streakStore = streakStore;
             _getAllStreaksQuery = getAllStreaksQuery;
-            _getAllStreakEntriesQuery = getAllStreakEntriesQuery;
-
             _streakOverviewViewModels = new ObservableCollection<StreakOverviewViewModel>();
 
             StrongReferenceMessenger.Default.Register<StreakAddedMessage>(this, OnStreakAdded);
@@ -44,43 +38,7 @@ namespace Streakathon.MAUI.Pages
 
             try
             {
-                GetAllStreaksQueryResponse streaksResponse = await _getAllStreaksQuery.Execute();
-
-                IEnumerable<Streak> streaks = streaksResponse.Documents.Select(d => new Streak()
-                {
-                    Id = d.Name.Split("/").LastOrDefault(),
-                    Title = d.Fields.Title.StringValue,
-                    Description = d.Fields.Description.StringValue,
-                }).ToList();
-
-                IEnumerable<StreakEntryCollectionGroupItem> streakEntriesResponse = await _getAllStreakEntriesQuery.Execute(
-                    new FirestoreRunQueryRequest()
-                    {
-                        StructuredQuery = new FirestoreStructuredQuery()
-                        {
-                            From = new List<FirestoreFromItem>()
-                            {
-                                new FirestoreFromItem()
-                                {
-                                    CollectionId = "entries",
-                                    AllDescendants = true
-                                }
-                            }
-                        }
-                    });
-
-                ILookup<string, StreakEntry> streakEntriesLookup = streakEntriesResponse
-                    .Select(s => new StreakEntry(s.StreakEntryId, s.StreakId, s.Document.Fields.Created.TimestampValue))
-                    .ToLookup(s => s.StreakId);
-
-                foreach (Streak streak in streaks)
-                {
-                    IEnumerable<StreakEntry> entries = streakEntriesLookup[streak.Id];
-
-                    streak.ResetEntries(entries);
-                }
-
-                _streakStore.Reset(streaks);
+                await _streakStore.Load();
 
                 UpdateStreaks();
             } 

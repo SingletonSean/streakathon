@@ -1,0 +1,63 @@
+﻿using Streakathon.MAUI.Entities.Streaks.Data;
+using Streakathon.MAUI.Shared.Firestore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Streakathon.MAUI.Entities.Streaks
+{
+    public class GetAllStreaksQuery
+    {
+        private readonly IGetAllStreaksQuery _getAllStreaksQuery;
+        private readonly IGetAllStreakEntriesQuery _getAllStreakEntriesQuery;
+
+        public GetAllStreaksQuery(IGetAllStreaksQuery getAllStreaksQuery, IGetAllStreakEntriesQuery getAllStreakEntriesQuery)
+        {
+            _getAllStreaksQuery = getAllStreaksQuery;
+            _getAllStreakEntriesQuery = getAllStreakEntriesQuery;
+        }
+
+        public async Task<IEnumerable<Streak>> Execute()
+        {
+            GetAllStreaksQueryResponse streaksResponse = await _getAllStreaksQuery.Execute();
+
+            IEnumerable<Streak> streaks = streaksResponse.Documents.Select(d => new Streak()
+            {
+                Id = d.Name.Split("/").LastOrDefault(),
+                Title = d.Fields.Title.StringValue,
+                Description = d.Fields.Description.StringValue,
+            }).ToList();
+
+            IEnumerable<StreakEntryCollectionGroupItem> streakEntriesResponse = await _getAllStreakEntriesQuery.Execute(
+                new FirestoreRunQueryRequest()
+                {
+                    StructuredQuery = new FirestoreStructuredQuery()
+                    {
+                        From = new List<FirestoreFromItem>()
+                        {
+                            new FirestoreFromItem()
+                            {
+                                CollectionId = "entries",
+                                AllDescendants = true
+                            }
+                        }
+                    }
+                });
+
+            ILookup<string, StreakEntry> streakEntriesLookup = streakEntriesResponse
+                .Select(s => new StreakEntry(s.StreakEntryId, s.StreakId, s.Document.Fields.Created.TimestampValue))
+                .ToLookup(s => s.StreakId);
+
+            foreach (Streak streak in streaks)
+            {
+                IEnumerable<StreakEntry> entries = streakEntriesLookup[streak.Id];
+
+                streak.ResetEntries(entries);
+            }
+
+            return streaks;
+        }
+    }
+}

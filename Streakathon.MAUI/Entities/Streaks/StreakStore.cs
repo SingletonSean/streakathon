@@ -1,44 +1,38 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
-using Streakathon.MAUI.Entities.Streaks.Data;
-using Streakathon.MAUI.Shared.Firestore;
 
 namespace Streakathon.MAUI.Entities.Streaks
 {
     public class StreakStore
     {
-        private readonly ICreateStreakCommand _createStreakCommand;
+        private readonly GetAllStreaksQuery _getAllStreaksQuery;
+        private readonly CreateStreakCommand _createStreakCommand;
         private readonly List<Streak> _streaks;
 
         public IEnumerable<Streak> Streaks => _streaks;
 
-        public StreakStore(ICreateStreakCommand createStreakCommand)
+        public StreakStore(GetAllStreaksQuery getAllStreaksQuery, CreateStreakCommand createStreakCommand)
         {
+            _getAllStreaksQuery = getAllStreaksQuery;
             _createStreakCommand = createStreakCommand;
 
             _streaks = new List<Streak>();
         }
 
-        public async Task Create(Streak newStreak)
+        public async Task Load()
         {
-            CreateStreakCommandResponse createdStreakResponse = 
-                await _createStreakCommand.Execute(new CreateStreakCommandRequest()
-                {
-                    Fields = new FirestoreStreakFields()
-                    {
-                        Title = new FirestoreStringField()
-                        {
-                            StringValue = newStreak.Title
-                        },
-                        Description = new FirestoreStringField()
-                        {
-                            StringValue = newStreak.Description
-                        }
-                    }
-                });
+            IEnumerable<Streak> streaks = await _getAllStreaksQuery.Execute();
 
-            _streaks.Add(newStreak);
+            _streaks.Clear();
+            _streaks.AddRange(streaks);
+        }
 
-            StrongReferenceMessenger.Default.Send(new StreakAddedMessage(newStreak));
+        public async Task Create(NewStreak newStreak)
+        {
+            Streak streak = await _createStreakCommand.Execute(newStreak);
+
+            _streaks.Add(streak);
+
+            StrongReferenceMessenger.Default.Send(new StreakAddedMessage(streak));
         }
 
         public void Reset(IEnumerable<Streak> streaks)

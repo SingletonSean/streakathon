@@ -22,12 +22,7 @@ namespace Streakathon.MAUI.Pages
         [RelayCommand]
         private async Task SubmitStreak()
         {
-            Streak streak = new Streak()
-            {
-                Title = Title,
-                Description = Description
-            };
-
+            NewStreak streak = new NewStreak(Title, Description);
             await _streakStore.Create(streak);
 
             await Shell.Current.GoToAsync("//Home");
