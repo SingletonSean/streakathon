@@ -23,12 +23,17 @@ namespace Streakathon.MAUI.Entities.Streaks
         {
             GetAllStreaksQueryResponse streaksResponse = await _getAllStreaksQuery.Execute();
 
-            IEnumerable<Streak> streaks = streaksResponse.Documents.Select(d => new Streak()
+            IEnumerable<Streak> streaks = streaksResponse.Documents?.Select(d => new Streak()
             {
                 Id = d.Name.Split("/").LastOrDefault(),
                 Title = d.Fields.Title.StringValue,
                 Description = d.Fields.Description.StringValue,
             }).ToList();
+
+            if (streaks == null || !streaks.Any())
+            {
+                return new List<Streak>();
+            }
 
             IEnumerable<StreakEntryCollectionGroupItem> streakEntriesResponse = await _getAllStreakEntriesQuery.Execute(
                 new FirestoreRunQueryRequest()
@@ -47,6 +52,7 @@ namespace Streakathon.MAUI.Entities.Streaks
                 });
 
             ILookup<string, StreakEntry> streakEntriesLookup = streakEntriesResponse
+                .Where(s => s?.Document?.Fields?.Created?.TimestampValue != null)
                 .Select(s => new StreakEntry(s.StreakEntryId, s.StreakId, s.Document.Fields.Created.TimestampValue))
                 .ToLookup(s => s.StreakId);
 

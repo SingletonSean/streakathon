@@ -1,11 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using Refit;
 using Streakathon.MAUI.Entities.Streaks;
-using Streakathon.MAUI.Entities.Streaks.Data;
-using Streakathon.MAUI.Shared.Firestore;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace Streakathon.MAUI.Pages
 {
@@ -19,6 +18,8 @@ namespace Streakathon.MAUI.Pages
         [ObservableProperty]
         private bool _isLoading;
 
+        public bool HasStreaks => StreakOverviewViewModels.Count() > 0;
+
         public HomeViewModel(StreakStore streakStore)
         {
             _streakStore = streakStore;
@@ -27,6 +28,8 @@ namespace Streakathon.MAUI.Pages
             StrongReferenceMessenger.Default.Register<StreakAddedMessage>(this, OnStreakAdded);
 
             LoadStreaksCommand.ExecuteAsync(null);
+
+            _streakOverviewViewModels.CollectionChanged += StreakOverviewViewModels_CollectionChanged;
         }
 
         [RelayCommand]
@@ -78,6 +81,11 @@ namespace Streakathon.MAUI.Pages
         private static StreakOverviewViewModel ToStreakOverviewViewModel(Streak streak)
         {
             return new StreakOverviewViewModel(streak.Title, streak.Length);
+        }
+
+        private void StreakOverviewViewModels_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(HasStreaks));
         }
     }
 }

@@ -3,10 +3,13 @@
     x:Class="Streakathon.MAUI.Pages.HomeView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:shared="clr-namespace:Streakathon.MAUI.Shared.Converters">
+    xmlns:shared="clr-namespace:Streakathon.MAUI.Shared.Converters"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
     <ContentPage.Resources>
         <ResourceDictionary>
             <shared:InverseBooleanToOpacityConverter x:Key="InverseBooleanToOpacityConverter" />
+            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <toolkit:VariableMultiValueConverter x:Key="VariableMultiValueConverter" ConditionType="None" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -32,44 +35,52 @@
                 Text="Add" />
         </Grid>
 
-        <ActivityIndicator
-            Margin="0,20,0,0"
-            IsRunning="{Binding IsLoading}"
-            IsVisible="{Binding IsLoading}"
-            VerticalOptions="Center" />
+        <Grid Margin="0,20,0,0">
+            <ActivityIndicator
+                IsRunning="{Binding IsLoading}"
+                IsVisible="{Binding IsLoading}"
+                VerticalOptions="Center" />
 
-        <CollectionView
-            Margin="0,20,0,0"
-            HorizontalOptions="FillAndExpand"
-            ItemsLayout="VerticalGrid, 2"
-            ItemsSource="{Binding StreakOverviewViewModels}"
-            Opacity="{Binding IsLoading, Converter={StaticResource InverseBooleanToOpacityConverter}}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Border
-                        Margin="0,0,20,20"
-                        Stroke="LightGray"
-                        StrokeShape="RoundRectangle 5"
-                        StrokeThickness="1">
-                        <Grid Padding="20">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
+            <Label HorizontalOptions="Center" Text="No streaks have been created yet.">
+                <Label.IsVisible>
+                    <MultiBinding Converter="{StaticResource VariableMultiValueConverter}">
+                        <Binding Path="HasStreaks" />
+                        <Binding Path="IsLoading" />
+                    </MultiBinding>
+                </Label.IsVisible>
+            </Label>
 
-                            <Label
-                                Grid.Column="0"
-                                FontSize="Medium"
-                                Text="{Binding Title}" />
-                            <Label
-                                Grid.Column="1"
-                                FontSize="Medium"
-                                HorizontalOptions="End"
-                                Text="{Binding Length}" />
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+            <CollectionView
+                ItemsLayout="VerticalGrid, 2"
+                ItemsSource="{Binding StreakOverviewViewModels}"
+                Opacity="{Binding IsLoading, Converter={StaticResource InverseBooleanToOpacityConverter}}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            Margin="0,0,20,20"
+                            Stroke="LightGray"
+                            StrokeShape="RoundRectangle 5"
+                            StrokeThickness="1">
+                            <Grid Padding="20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Label
+                                    Grid.Column="0"
+                                    FontSize="Medium"
+                                    Text="{Binding Title}" />
+                                <Label
+                                    Grid.Column="1"
+                                    FontSize="Medium"
+                                    HorizontalOptions="End"
+                                    Text="{Binding Length}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
     </VerticalStackLayout>
 </ContentPage>
