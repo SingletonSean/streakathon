@@ -37,7 +37,10 @@ public static class MauiProgram
         services.AddTransient<AddStreakViewModel>();
         services.AddTransient<AddStreakView>();
 
-		services.AddRefitClient<IGetAllStreaksQuery>().ConfigureHttpClient(c =>
+        services.AddTransient<StreakDetailsViewModel>();
+        services.AddTransient<StreakDetailsView>();
+
+        services.AddRefitClient<IGetAllStreaksQuery>().ConfigureHttpClient(c =>
 		{
 			c.BaseAddress = new Uri("https://firestore.googleapis.com/v1/projects/streakathon/databases/(default)/documents");
         });

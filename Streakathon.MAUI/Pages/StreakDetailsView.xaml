@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Streakathon.MAUI.Pages.StreakDetailsView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="StreakDetailsView">
+    <VerticalStackLayout Padding="20" MaximumWidthRequest="800">
+        <Label
+            FontAttributes="Bold"
+            FontSize="Large"
+            Text="{Binding Title}" />
+
+        <Label Margin="0,10,0,0" Text="{Binding Description}" />
+
+        <HorizontalStackLayout Margin="0,10,0,0">
+            <Label Text="You've completed this streak for" />
+            <Label
+                Padding="5,0"
+                FontAttributes="Bold"
+                Text="{Binding Length}" />
+            <Label Text="consecutive day(s)!" />
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+</ContentPage>

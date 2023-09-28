@@ -10,10 +10,5 @@
     <ShellContent
         Title="Streaks"
         ContentTemplate="{DataTemplate pages:HomeView}"
-        Route="Home" />
-
-    <ShellContent
-        Title="Add Streak"
-        ContentTemplate="{DataTemplate pages:AddStreakView}"
-        Route="AddStreak" />
+        Route="Streak" />
 </Shell>

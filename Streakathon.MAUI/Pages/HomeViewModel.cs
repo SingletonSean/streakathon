@@ -8,7 +8,7 @@ using System.ComponentModel;
 
 namespace Streakathon.MAUI.Pages
 {
-    public partial class HomeViewModel : ObservableObject
+    public partial class HomeViewModel : ObservableValidator
     {
         private readonly StreakStore _streakStore;
         private readonly ObservableCollection<StreakOverviewViewModel> _streakOverviewViewModels;
@@ -56,7 +56,7 @@ namespace Streakathon.MAUI.Pages
         [RelayCommand]
         private async Task AddStreak()
         {
-            await Shell.Current.GoToAsync("//AddStreak");
+            await Shell.Current.GoToAsync("New");
         }
 
         private void UpdateStreaks()
@@ -80,7 +80,7 @@ namespace Streakathon.MAUI.Pages
 
         private static StreakOverviewViewModel ToStreakOverviewViewModel(Streak streak)
         {
-            return new StreakOverviewViewModel(streak.Title, streak.Length);
+            return new StreakOverviewViewModel(streak.Id, streak.Title, streak.Length);
         }
 
         private void StreakOverviewViewModels_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
