@@ -15,9 +15,4 @@ namespace Streakathon.MAUI.Entities.Streaks.Data
         public string StreakId => Document?.Name?.Split("/")?.TakeLast(3)?.FirstOrDefault();
         public string StreakEntryId => Document?.Name?.Split("/")?.LastOrDefault();
     }
-
-    public class FirestoreStreakEntryFields
-    {
-        public FirestoreTimestampField Created { get; set; }
-    }
 }

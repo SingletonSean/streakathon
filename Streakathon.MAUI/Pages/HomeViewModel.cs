@@ -26,6 +26,7 @@ namespace Streakathon.MAUI.Pages
             _streakOverviewViewModels = new ObservableCollection<StreakOverviewViewModel>();
 
             StrongReferenceMessenger.Default.Register<StreakAddedMessage>(this, OnStreakAdded);
+            StrongReferenceMessenger.Default.Register<StreakEntryAddedMessage>(this, OnStreakEntryAdded);
 
             LoadStreaksCommand.ExecuteAsync(null);
 
@@ -76,6 +77,19 @@ namespace Streakathon.MAUI.Pages
 
             StreakOverviewViewModel streakViewModel = ToStreakOverviewViewModel(streak);
             _streakOverviewViewModels.Add(streakViewModel);
+        }
+
+        private void OnStreakEntryAdded(object recipient, StreakEntryAddedMessage message)
+        {
+            StreakOverviewViewModel viewModel = _streakOverviewViewModels.FirstOrDefault(s => s.Id == message.Streak.Id);
+
+            if (viewModel == null)
+            {
+                return;
+            }
+
+            int viewModelIndex = _streakOverviewViewModels.IndexOf(viewModel);
+            _streakOverviewViewModels[viewModelIndex] = ToStreakOverviewViewModel(message.Streak);
         }
 
         private static StreakOverviewViewModel ToStreakOverviewViewModel(Streak streak)

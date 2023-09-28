@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Streakathon.MAUI.Entities.Streaks;
 using System;
 using System.Collections.Generic;
@@ -34,9 +35,33 @@ namespace Streakathon.MAUI.Pages
         public string Description => CurrentStreak?.Description;
         public int Length => CurrentStreak?.Length ?? 0;
 
+        [ObservableProperty]
+        private bool _isLoading;
+
         public StreakDetailsViewModel(StreakStore streakStore)
         {
             _streakStore = streakStore;
+        }
+
+        [RelayCommand]
+        private async Task StreakCheckIn()
+        {
+            IsLoading = true;
+
+            try
+            {
+                await _streakStore.AddStreakEntry(Id);
+
+                OnPropertyChanged(nameof(Length));
+            }
+            catch (Exception)
+            {
+                await Shell.Current.DisplayAlert("Error", "Failed to perform streak check-in. Please try again later.", "Ok");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
     }
 }

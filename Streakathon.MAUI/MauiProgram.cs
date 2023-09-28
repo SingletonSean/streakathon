@@ -29,7 +29,8 @@ public static class MauiProgram
 
 		services.AddSingleton<GetAllStreaksQuery>();
 		services.AddSingleton<CreateStreakCommand>();
-		services.AddSingleton<StreakStore>();
+		services.AddSingleton<CreateStreakEntryCommand>();
+        services.AddSingleton<StreakStore>();
 
         services.AddTransient<HomeViewModel>();
 		services.AddTransient<HomeView>();
@@ -49,6 +50,10 @@ public static class MauiProgram
             c.BaseAddress = new Uri("https://firestore.googleapis.com/v1/projects/streakathon/databases/(default)");
         });
         services.AddRefitClient<ICreateStreakCommand>().ConfigureHttpClient(c =>
+        {
+            c.BaseAddress = new Uri("https://firestore.googleapis.com/v1/projects/streakathon/databases/(default)/documents");
+        });
+        services.AddRefitClient<ICreateStreakEntryCommand>().ConfigureHttpClient(c =>
         {
             c.BaseAddress = new Uri("https://firestore.googleapis.com/v1/projects/streakathon/databases/(default)/documents");
         });

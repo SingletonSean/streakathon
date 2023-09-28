@@ -6,14 +6,19 @@ namespace Streakathon.MAUI.Entities.Streaks
     {
         private readonly GetAllStreaksQuery _getAllStreaksQuery;
         private readonly CreateStreakCommand _createStreakCommand;
+        private readonly CreateStreakEntryCommand _createStreakEntryCommand;
         private readonly List<Streak> _streaks;
 
         public IEnumerable<Streak> Streaks => _streaks;
 
-        public StreakStore(GetAllStreaksQuery getAllStreaksQuery, CreateStreakCommand createStreakCommand)
+        public StreakStore(
+            GetAllStreaksQuery getAllStreaksQuery, 
+            CreateStreakCommand createStreakCommand, 
+            CreateStreakEntryCommand createStreakEntryCommand)
         {
             _getAllStreaksQuery = getAllStreaksQuery;
             _createStreakCommand = createStreakCommand;
+            _createStreakEntryCommand = createStreakEntryCommand;
 
             _streaks = new List<Streak>();
         }
@@ -33,6 +38,16 @@ namespace Streakathon.MAUI.Entities.Streaks
             _streaks.Add(streak);
 
             StrongReferenceMessenger.Default.Send(new StreakAddedMessage(streak));
+        }
+
+        public async Task AddStreakEntry(string streakId)
+        {
+            StreakEntry streakEntry = await _createStreakEntryCommand.Execute(streakId);
+
+            Streak streak = _streaks.FirstOrDefault(s => s.Id == streakEntry.StreakId);
+            streak?.AddEntry(streakEntry);
+
+            StrongReferenceMessenger.Default.Send(new StreakEntryAddedMessage(streak, streakEntry));
         }
 
         public void Reset(IEnumerable<Streak> streaks)

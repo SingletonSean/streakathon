@@ -5,14 +5,13 @@ namespace Streakathon.MAUI.Entities.Streaks
 {
     public partial class StreakOverviewViewModel : ObservableObject
     {
-        private readonly string _id;
-
+        public string Id { get; }
         public string Title { get; }
         public int Length { get; }
 
         public StreakOverviewViewModel(string id, string title, int length)
         {
-            _id = id;
+            Id = id;
             Title = title;
             Length = length;
         }
@@ -22,7 +21,7 @@ namespace Streakathon.MAUI.Entities.Streaks
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>()
             {
-                { "id", _id  }
+                { "id", Id  }
             };
                
             await Shell.Current.GoToAsync("Details", parameters);
