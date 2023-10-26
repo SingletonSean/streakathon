@@ -67,6 +67,8 @@ jobs:
         git push origin master
 
     - name: Master -> Release
+      env: 
+        GITHUB_TOKEN: ${{ secrets.PAT }}
       run: |
         git checkout -b release
         git pull origin release
