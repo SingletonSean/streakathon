@@ -25,13 +25,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 7.0.x
-
     - name: Bump Version
-      if:  ${{ inputs.versionType }} == 'minor'
       shell: pwsh
       run: |
         $xml = [Xml] (Get-Content ./Streakathon.MAUI/Streakathon.MAUI.csproj)
@@ -41,7 +35,7 @@ jobs:
         $minor = $version.Minor
         $patch = $version.Build
 
-        switch("minor") 
+        switch("${{ inputs.versionType }}") 
         {
             "major"
             {
@@ -58,7 +52,14 @@ jobs:
         }
 
         $newVersion = "{0}.{1}.{2}" -f $major, $minor, $patch
-        echo $newVersion
         $xml.Project.PropertyGroup.ApplicationDisplayVersion = $newVersion
         $xml.Save("./Streakathon.MAUI/Streakathon.MAUI.csproj")
+
+    - name: Commit Version Bump
+      run: |
+        git status
+        git config user.name "GitHub Actions Bot"
+        git config user.email "<>"
+        git add ./Streakathon.MAUI/Streakathon.MAUI.csproj
+        git commit -m "Bump version"
 
