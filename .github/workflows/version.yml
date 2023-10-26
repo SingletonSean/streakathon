@@ -57,9 +57,13 @@ jobs:
 
     - name: Commit Version Bump
       run: |
-        git status
         git config user.name "GitHub Actions Bot"
         git config user.email "<>"
         git add ./Streakathon.MAUI/Streakathon.MAUI.csproj
         git commit -m "Bump version"
+
+    - name: Push Version Bump
+      run: |
+        git push origin master
+
 
