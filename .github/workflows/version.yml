@@ -71,6 +71,6 @@ jobs:
         git checkout -b release
         git pull origin release
         git merge master
-        git push orgin release
+        git push origin release
 
 
