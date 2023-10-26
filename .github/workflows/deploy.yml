@@ -1,8 +1,12 @@
-name: Deploy
+﻿name: Deploy
 
 on:
   push:
     branches: [ "master" ]
+
+permissions:
+  actions: write
+  contents: write
 
 jobs:
   build:
@@ -17,25 +21,52 @@ jobs:
       with:
         dotnet-version: 7.0.x
 
-    - name: Install MAUI workload
-      run: dotnet workload install maui
+    #- name: Install MAUI workload
+    #  run: dotnet workload install maui
 
-    - name: Restore
-      run: dotnet restore
+    #- name: Restore
+    #  run: dotnet restore
 
-    - name: Build
-      run: dotnet build -c Release -f:net7.0-windows10.0.19041.0
+    #- name: Build
+    #  run: dotnet build -c Release -f:net7.0-windows10.0.19041.0
 
-    - name: Decode Signing Certificate
+    #- name: Decode Signing Certificate
+    #  run: |
+    #    echo "${{ secrets.SIGNING_CERTIFICATE_BASE_64_CONTENT }}" > cert.pfx.asc
+    #    certutil -decode cert.pfx.asc cert.pfx
+
+    #- name: Install Signing Certficiate
+    #  run: certutil -user -q -p ${{ secrets.SIGNING_CERTIFICATE_PASSWORD }} -importpfx cert.pfx NoRoot
+
+    #- name: Publish
+    #  run: dotnet publish -c Release -f:net7.0-windows10.0.19041.0 /p:GenerateAppxPackageOnBuild=true /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.SIGNING_CERTIFICATE_THUMBPRINT }}"
+
+    - name: Extract Version
+      id: extractVersion
+      shell: pwsh
       run: |
-        echo "${{ secrets.SIGNING_CERTIFICATE_BASE_64_CONTENT }}" > cert.pfx.asc
-        certutil -decode cert.pfx.asc cert.pfx
+        $xml = [Xml] (Get-Content ./Streakathon.MAUI/Streakathon.MAUI.csproj)
+        [string]$version = [Version] $xml.Project.PropertyGroup.ApplicationDisplayVersion
+        echo "version=$($version)" >> $env:GITHUB_OUTPUT
 
-    - name: Install Signing Certficiate
-      run: certutil -user -q -p ${{ secrets.SIGNING_CERTIFICATE_PASSWORD }} -importpfx cert.pfx NoRoot
+    - name: Create Tag
+      uses: actions/github-script@v5
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          github.rest.git.createRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: 'refs/tags/v${{ steps.extractVersion.outputs.version }}',
+            sha: context.sha
+          })
 
-    - name: Publish
-      run: dotnet publish -c Release -f:net7.0-windows10.0.19041.0 /p:GenerateAppxPackageOnBuild=true /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.SIGNING_CERTIFICATE_THUMBPRINT }}"
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v${{ steps.extractVersion.outputs.version }}
+        fail_on_unmatched_files: false
+        files: .\**\AppPackages\**\*.*
 
     - name: Upload
       uses: actions/upload-artifact@v3.1.0
