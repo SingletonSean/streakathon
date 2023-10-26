@@ -30,11 +30,35 @@ jobs:
       with:
         dotnet-version: 7.0.x
 
-    - name: Extract Version
-      id: extractVersion
+    - name: Bump Version
+      if:  ${{ inputs.versionType }} == 'minor'
       shell: pwsh
       run: |
         $xml = [Xml] (Get-Content ./Streakathon.MAUI/Streakathon.MAUI.csproj)
-        [string]$version = [Version] $xml.Project.PropertyGroup.ApplicationDisplayVersion
-        echo "version=$($version)" >> $env:GITHUB_OUTPUT
+        $version = [Version] $xml.Project.PropertyGroup.ApplicationDisplayVersion
+
+        $major = $version.Major
+        $minor = $version.Minor
+        $patch = $version.Build
+
+        switch("minor") 
+        {
+            "major"
+            {
+                $major = $major + 1
+            }
+            "minor"
+            {
+                $minor = $minor + 1
+            }
+            "patch"
+            {
+                $patch = $patch + 1
+            }
+        }
+
+        $newVersion = "{0}.{1}.{2}" -f $major, $minor, $patch
+        echo $newVersion
+        $xml.Project.PropertyGroup.ApplicationDisplayVersion = $newVersion
+        $xml.Save("./Streakathon.MAUI/Streakathon.MAUI.csproj")
 
