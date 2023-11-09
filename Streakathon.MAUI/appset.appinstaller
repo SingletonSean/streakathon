@@ -6,8 +6,8 @@
 
     <MainPackage
         Name="e299e9a1-12ac-49f8-9e2a-c6865b5bbde9"
-        Publisher="CN=singletonsean"
-        Version="2.3.2.0"
+        Publisher="CN=SingletonSean"
+        Version="2.3.3.0"
         ProcessorArchitecture="x64"
         Uri="https://github.com/SingletonSean/streakathon/releases/latest/download/AutoUpdate.msix" />
 
