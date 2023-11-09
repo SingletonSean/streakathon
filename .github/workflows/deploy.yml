@@ -61,8 +61,13 @@ jobs:
             sha: context.sha
           })
 
+    - name: Zip Release
+      shell: pwsh
+      run: Compress-Archive -Path ./Streakathon.MAUI/bin/Debug/net7.0-windows10.0.19041.0/win10-x64/AppPackages -Destination ./Streakathon.zip
+
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
         tag_name: v${{ steps.extractVersion.outputs.version }}
-        files: ./**/AppPackages/**/*.*
+        files: | 
+          ./Streakathon.zip
