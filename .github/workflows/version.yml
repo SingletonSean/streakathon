@@ -70,8 +70,7 @@ jobs:
 
     - name: Master -> Release
       run: |
-        git checkout -b release
         git fetch origin release
-        git reset --hard origin/release
+        git checkout -b release origin/release
         git merge master
         git push origin release
