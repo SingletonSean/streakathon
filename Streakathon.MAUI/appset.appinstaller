@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <AppInstaller
-    xmlns="http://schemas.microsoft.com/appx/appinstaller/2021"
+    xmlns="http://schemas.microsoft.com/appx/appinstaller/2018"
     Version="1.0.0.0"
     Uri="https://github.com/SingletonSean/streakathon/releases/latest/download/appset.appinstaller" >
 
     <MainPackage
-        Name="Streakathon.MAUI"
+        Name="e299e9a1-12ac-49f8-9e2a-c6865b5bbde9"
         Publisher="CN=singletonsean"
-        Version="1.3.21.0"
+        Version="2.3.0.0"
         ProcessorArchitecture="x64"
         Uri="https://github.com/SingletonSean/streakathon/releases/latest/download/AutoUpdate.msix" />
 
