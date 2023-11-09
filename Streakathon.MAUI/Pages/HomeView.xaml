@@ -13,87 +13,89 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <VerticalStackLayout Padding="20" MaximumWidthRequest="800">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+    <ScrollView>
+        <VerticalStackLayout Padding="20" MaximumWidthRequest="800">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-            <Label
-                Grid.Column="0"
-                FontAttributes="Bold"
-                FontSize="Large"
-                Text="Streaks" />
+                <Label
+                    Grid.Column="0"
+                    FontAttributes="Bold"
+                    FontSize="Large"
+                    Text="Streaks 123" />
 
-            <Button
-                Grid.Column="1"
-                Padding="20,0"
-                Command="{Binding AddStreakCommand}"
-                FontAttributes="Bold"
-                HorizontalOptions="End"
-                Text="Add" />
-        </Grid>
+                <Button
+                    Grid.Column="1"
+                    Padding="20,0"
+                    Command="{Binding AddStreakCommand}"
+                    FontAttributes="Bold"
+                    HorizontalOptions="End"
+                    Text="Add" />
+            </Grid>
 
-        <Grid Margin="0,20,0,0">
-            <ActivityIndicator
-                IsRunning="{Binding IsLoading}"
-                IsVisible="{Binding IsLoading}"
-                VerticalOptions="Center" />
+            <Grid Margin="0,20,0,0">
+                <ActivityIndicator
+                    IsRunning="{Binding IsLoading}"
+                    IsVisible="{Binding IsLoading}"
+                    VerticalOptions="Center" />
 
-            <Label HorizontalOptions="Center" Text="No streaks have been created yet.">
-                <Label.IsVisible>
-                    <MultiBinding Converter="{StaticResource VariableMultiValueConverter}">
-                        <Binding Path="HasStreaks" />
-                        <Binding Path="IsLoading" />
-                    </MultiBinding>
-                </Label.IsVisible>
-            </Label>
+                <Label HorizontalOptions="Center" Text="No streaks have been created yet.">
+                    <Label.IsVisible>
+                        <MultiBinding Converter="{StaticResource VariableMultiValueConverter}">
+                            <Binding Path="HasStreaks" />
+                            <Binding Path="IsLoading" />
+                        </MultiBinding>
+                    </Label.IsVisible>
+                </Label>
 
-            <CollectionView
-                ItemsLayout="VerticalGrid, 2"
-                ItemsSource="{Binding StreakOverviewViewModels}"
-                Opacity="{Binding IsLoading, Converter={StaticResource InverseBooleanToOpacityConverter}}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Border
-                            Margin="0,0,20,20"
-                            Stroke="LightGray"
-                            StrokeShape="RoundRectangle 5"
-                            StrokeThickness="1">
-                            <Grid Padding="20">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="auto" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
+                <CollectionView
+                    ItemsLayout="VerticalGrid, 2"
+                    ItemsSource="{Binding StreakOverviewViewModels}"
+                    Opacity="{Binding IsLoading, Converter={StaticResource InverseBooleanToOpacityConverter}}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border
+                                Margin="0,0,20,20"
+                                Stroke="LightGray"
+                                StrokeShape="RoundRectangle 5"
+                                StrokeThickness="1">
+                                <Grid Padding="20">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
 
-                                <Label
-                                    Grid.Row="0"
-                                    Grid.Column="0"
-                                    FontSize="Medium"
-                                    Text="{Binding Title}" />
-                                <Label
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    FontSize="Medium"
-                                    HorizontalOptions="End"
-                                    Text="{Binding Length}" />
+                                    <Label
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        FontSize="Medium"
+                                        Text="{Binding Title}" />
+                                    <Label
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        FontSize="Medium"
+                                        HorizontalOptions="End"
+                                        Text="{Binding Length}" />
 
-                                <Button
-                                    Grid.Row="1"
-                                    Grid.ColumnSpan="2"
-                                    Margin="0,10,0,0"
-                                    Command="{Binding NavigateStreakDetailsCommand}"
-                                    Text="View Streak" />
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </Grid>
-    </VerticalStackLayout>
+                                    <Button
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="2"
+                                        Margin="0,10,0,0"
+                                        Command="{Binding NavigateStreakDetailsCommand}"
+                                        Text="View Streak" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
