@@ -65,9 +65,14 @@ jobs:
       shell: pwsh
       run: Compress-Archive -Path ./Streakathon.MAUI/bin/Release/net7.0-windows10.0.19041.0/win10-x64/AppPackages -Destination ./Streakathon.zip
 
+    - name: Rename Installer
+      shell: pwsh
+      run: Rename-Item ./Streakathon.MAUI/bin/Release/net7.0-windows10.0.19041.0/win10-x64/AppPackages/Streakathon.MAUI_${{ steps.extractVersion.outputs.version }}_Test/Streakathon.MAUI_${{ steps.extractVersion.outputs.version }}_x64.msix AutoUpdate.msix
+
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
         tag_name: v${{ steps.extractVersion.outputs.version }}
         files: | 
           ./Streakathon.zip
+          ./Streakathon.MAUI/bin/Release/net7.0-windows10.0.19041.0/win10-x64/AppPackages/Streakathon.MAUI_${{ steps.extractVersion.outputs.version }}_Test/AutoUpdate.msix
