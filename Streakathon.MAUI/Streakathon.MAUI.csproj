@@ -15,7 +15,7 @@
     <ApplicationId>com.companyname.streakathon.maui</ApplicationId>
     <ApplicationIdGuid>e299e9a1-12ac-49f8-9e2a-c6865b5bbde9</ApplicationIdGuid>
     <!-- Versions -->
-    <ApplicationDisplayVersion>2.0.0</ApplicationDisplayVersion>
+    <ApplicationDisplayVersion>2.1.0</ApplicationDisplayVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
