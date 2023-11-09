@@ -73,7 +73,9 @@ jobs:
 
     - name: Master -> Release
       run: |
+        git --no-pager log --decorate=short --pretty=oneline
         git fetch origin release
         git checkout -b release origin/release
+        git --no-pager log --decorate=short --pretty=oneline
         git merge master
         git push origin release
