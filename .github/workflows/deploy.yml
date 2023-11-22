@@ -19,7 +19,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 7.0.x
+        dotnet-version: 8.0.x
 
     - name: Install MAUI workload
       run: dotnet workload install maui
@@ -28,7 +28,7 @@ jobs:
       run: dotnet restore
 
     - name: Build
-      run: dotnet build -c Release -f:net7.0-windows10.0.19041.0
+      run: dotnet build -c Release -f:net8.0-windows10.0.19041.0
 
     - name: Decode Signing Certificate
       run: |
@@ -39,7 +39,7 @@ jobs:
       run: certutil -user -q -p ${{ secrets.SIGNING_CERTIFICATE_PASSWORD }} -importpfx cert.pfx NoRoot
 
     - name: Publish
-      run: dotnet publish -c Release -f:net7.0-windows10.0.19041.0 /p:GenerateAppxPackageOnBuild=true /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.SIGNING_CERTIFICATE_THUMBPRINT }}"
+      run: dotnet publish -c Release -f:net8.0-windows10.0.19041.0 /p:GenerateAppxPackageOnBuild=true /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.SIGNING_CERTIFICATE_THUMBPRINT }}"
 
     - name: Extract Version
       id: extractVersion
@@ -63,15 +63,15 @@ jobs:
 
     - name: Move App Installer File
       shell: pwsh
-      run: Move-Item ./Streakathon.MAUI/appset.appinstaller ./Streakathon.MAUI/bin/Release/net7.0-windows10.0.19041.0/win10-x64/AppPackages/Streakathon.MAUI_${{ steps.extractVersion.outputs.version }}.0_Test/appset.appinstaller
+      run: Move-Item ./Streakathon.MAUI/appset.appinstaller ./Streakathon.MAUI/bin/Release/net8.0-windows10.0.19041.0/win10-x64/AppPackages/Streakathon.MAUI_${{ steps.extractVersion.outputs.version }}.0_Test/appset.appinstaller
 
     - name: Zip Release
       shell: pwsh
-      run: Compress-Archive -Path ./Streakathon.MAUI/bin/Release/net7.0-windows10.0.19041.0/win10-x64/AppPackages/Streakathon.MAUI_${{ steps.extractVersion.outputs.version }}.0_Test -Destination ./Streakathon.zip
+      run: Compress-Archive -Path ./Streakathon.MAUI/bin/Release/net8.0-windows10.0.19041.0/win10-x64/AppPackages/Streakathon.MAUI_${{ steps.extractVersion.outputs.version }}.0_Test -Destination ./Streakathon.zip
 
     - name: Rename Installer
       shell: pwsh
-      run: Rename-Item ./Streakathon.MAUI/bin/Release/net7.0-windows10.0.19041.0/win10-x64/AppPackages/Streakathon.MAUI_${{ steps.extractVersion.outputs.version }}.0_Test/Streakathon.MAUI_${{ steps.extractVersion.outputs.version }}.0_x64.msix AutoUpdate.msix
+      run: Rename-Item ./Streakathon.MAUI/bin/Release/net8.0-windows10.0.19041.0/win10-x64/AppPackages/Streakathon.MAUI_${{ steps.extractVersion.outputs.version }}.0_Test/Streakathon.MAUI_${{ steps.extractVersion.outputs.version }}.0_x64.msix AutoUpdate.msix
 
     - name: Create Release
       uses: softprops/action-gh-release@v1
@@ -79,5 +79,5 @@ jobs:
         tag_name: v${{ steps.extractVersion.outputs.version }}
         files: | 
           ./Streakathon.zip
-          ./Streakathon.MAUI/bin/Release/net7.0-windows10.0.19041.0/win10-x64/AppPackages/Streakathon.MAUI_${{ steps.extractVersion.outputs.version }}.0_Test/AutoUpdate.msix
-          ./Streakathon.MAUI/bin/Release/net7.0-windows10.0.19041.0/win10-x64/AppPackages/Streakathon.MAUI_${{ steps.extractVersion.outputs.version }}.0_Test/appset.appinstaller
+          ./Streakathon.MAUI/bin/Release/net8.0-windows10.0.19041.0/win10-x64/AppPackages/Streakathon.MAUI_${{ steps.extractVersion.outputs.version }}.0_Test/AutoUpdate.msix
+          ./Streakathon.MAUI/bin/Release/net8.0-windows10.0.19041.0/win10-x64/AppPackages/Streakathon.MAUI_${{ steps.extractVersion.outputs.version }}.0_Test/appset.appinstaller
