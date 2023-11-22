@@ -71,6 +71,7 @@ jobs:
         git config user.name "GitHub Actions Bot"
         git config user.email "<>"
         git add ./Streakathon.MAUI/Streakathon.MAUI.csproj
+        git add ./Streakathon.MAUI/appset.appinstaller
         git commit -m "Bump version"
 
     - name: Push Version Bump
