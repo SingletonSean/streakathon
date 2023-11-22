@@ -51,47 +51,39 @@
                     </Label.IsVisible>
                 </Label>
 
-                <CollectionView
-                    ItemsLayout="VerticalGrid, 2"
-                    ItemsSource="{Binding StreakOverviewViewModels}"
-                    Opacity="{Binding IsLoading, Converter={StaticResource InverseBooleanToOpacityConverter}}">
+                <CollectionView ItemsLayout="VerticalGrid, 2" ItemsSource="{Binding StreakOverviewViewModels}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Border
-                                Margin="0,0,20,20"
-                                Stroke="LightGray"
-                                StrokeShape="RoundRectangle 5"
-                                StrokeThickness="1">
-                                <Grid Padding="20">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto" />
-                                        <RowDefinition Height="auto" />
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
+                            <Grid>
+                                <Border
+                                    Margin="0,0,20,20"
+                                    Stroke="LightGray"
+                                    StrokeShape="RoundRectangle 5"
+                                    StrokeThickness="1">
+                                    <VerticalStackLayout Padding="20">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="auto" />
+                                            </Grid.ColumnDefinitions>
 
-                                    <Label
-                                        Grid.Row="0"
-                                        Grid.Column="0"
-                                        FontSize="Medium"
-                                        Text="{Binding Title}" />
-                                    <Label
-                                        Grid.Row="0"
-                                        Grid.Column="1"
-                                        FontSize="Medium"
-                                        HorizontalOptions="End"
-                                        Text="{Binding Length}" />
+                                            <Label
+                                                Grid.Column="0"
+                                                FontSize="Medium"
+                                                Text="{Binding Title}" />
+                                            <Label
+                                                Grid.Column="1"
+                                                FontSize="Medium"
+                                                Text="{Binding Length}" />
+                                        </Grid>
 
-                                    <Button
-                                        Grid.Row="1"
-                                        Grid.ColumnSpan="2"
-                                        Margin="0,10,0,0"
-                                        Command="{Binding NavigateStreakDetailsCommand}"
-                                        Text="View Streak" />
-                                </Grid>
-                            </Border>
+                                        <Button
+                                            Margin="0,10,0,0"
+                                            Command="{Binding NavigateStreakDetailsCommand}"
+                                            Text="View Streak" />
+                                    </VerticalStackLayout>
+                                </Border>
+                            </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
