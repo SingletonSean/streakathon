@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:shared="clr-namespace:Streakathon.MAUI.Shared.Converters"
+    xmlns:streaks="clr-namespace:Streakathon.MAUI.Entities.Streaks"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -14,7 +15,7 @@
     </ContentPage.Resources>
 
     <ScrollView>
-        <VerticalStackLayout Padding="20" MaximumWidthRequest="800">
+        <VerticalStackLayout Padding="20,50" MaximumWidthRequest="800">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
@@ -24,19 +25,19 @@
                 <Label
                     Grid.Column="0"
                     FontAttributes="Bold"
-                    FontSize="Large"
-                    Text="Streaks!" />
+                    FontSize="42"
+                    Text="Streaks" />
 
                 <Button
                     Grid.Column="1"
-                    Padding="20,0"
                     Command="{Binding AddStreakCommand}"
-                    FontAttributes="Bold"
                     HorizontalOptions="End"
-                    Text="Add" />
+                    Style="{StaticResource ButtonPrimary}"
+                    Text="Add"
+                    VerticalOptions="Center" />
             </Grid>
 
-            <Grid Margin="0,20,0,0">
+            <Grid Margin="0,50,0,0">
                 <ActivityIndicator
                     IsRunning="{Binding IsLoading}"
                     IsVisible="{Binding IsLoading}"
@@ -51,38 +52,86 @@
                     </Label.IsVisible>
                 </Label>
 
-                <CollectionView ItemsLayout="VerticalGrid, 2" ItemsSource="{Binding StreakOverviewViewModels}">
+                <CollectionView ItemsSource="{Binding StreakOverviewViewModels}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid>
-                                <Border
-                                    Margin="0,0,20,20"
-                                    Stroke="LightGray"
-                                    StrokeShape="RoundRectangle 5"
-                                    StrokeThickness="1">
-                                    <VerticalStackLayout Padding="20">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="auto" />
-                                            </Grid.ColumnDefinitions>
+                            <Grid Padding="0,0,0,20">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
 
-                                            <Label
-                                                Grid.Column="0"
-                                                FontSize="Medium"
-                                                Text="{Binding Title}" />
-                                            <Label
-                                                Grid.Column="1"
-                                                FontSize="Medium"
-                                                Text="{Binding Length}" />
-                                        </Grid>
+                                    <Grid
+                                        Grid.Column="0"
+                                        HeightRequest="100"
+                                        WidthRequest="100">
+                                        <Label
+                                            FontAttributes="Bold"
+                                            FontSize="48"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding Length}"
+                                            VerticalOptions="Center"
+                                            ZIndex="2" />
+                                        <RoundRectangle CornerRadius="15" ZIndex="1">
+                                            <RoundRectangle.Style>
+                                                <Style TargetType="RoundRectangle">
+                                                    <Style.Triggers>
+                                                        <DataTrigger
+                                                            Binding="{Binding LengthScore}"
+                                                            TargetType="RoundRectangle"
+                                                            Value="{x:Static streaks:StreakLengthScore.BAD}">
+                                                            <Setter Property="BackgroundColor" Value="#FF5E5E" />
+                                                        </DataTrigger>
+                                                        <DataTrigger
+                                                            Binding="{Binding LengthScore}"
+                                                            TargetType="RoundRectangle"
+                                                            Value="{x:Static streaks:StreakLengthScore.MEDIUM}">
+                                                            <Setter Property="BackgroundColor" Value="#FFF38A" />
+                                                        </DataTrigger>
+                                                        <DataTrigger
+                                                            Binding="{Binding LengthScore}"
+                                                            TargetType="RoundRectangle"
+                                                            Value="{x:Static streaks:StreakLengthScore.GOOD}">
+                                                            <Setter Property="BackgroundColor" Value="#5BEC6A" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </RoundRectangle.Style>
+                                        </RoundRectangle>
+                                    </Grid>
 
-                                        <Button
+                                    <VerticalStackLayout
+                                        Grid.Column="1"
+                                        Margin="20,0,0,0"
+                                        VerticalOptions="Center">
+                                        <Label
+                                            FontAttributes="Bold"
+                                            FontSize="24"
+                                            Text="{Binding Title}" />
+
+                                        <!--<Button
                                             Margin="0,10,0,0"
                                             Command="{Binding NavigateStreakDetailsCommand}"
-                                            Text="View Streak" />
+                                            Style="{StaticResource ButtonLink}"
+                                            Text="View Streak" />-->
                                     </VerticalStackLayout>
-                                </Border>
+
+                                    <Grid
+                                        Grid.Column="2"
+                                        Margin="10,0,0,0"
+                                        VerticalOptions="Center">
+                                        <Button
+                                            Command="{Binding NavigateStreakDetailsCommand}"
+                                            Style="{StaticResource ButtonLink}"
+                                            Text="View Streak" />
+                                        <!--<Image
+                                            HeightRequest="50"
+                                            Source="arrow_right.png"
+                                            WidthRequest="50" />-->
+                                    </Grid>
+                                </Grid>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

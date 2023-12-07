@@ -9,6 +9,24 @@ namespace Streakathon.MAUI.Entities.Streaks
         public string Title { get; }
         public int Length { get; }
 
+        public StreakLengthScore LengthScore
+        {
+            get
+            {
+                if (Length == 0)
+                {
+                    return StreakLengthScore.BAD;
+                }
+
+                if (Length < 10)
+                {
+                    return StreakLengthScore.MEDIUM;
+                }
+
+                return StreakLengthScore.GOOD;
+            }
+        } 
+
         public StreakOverviewViewModel(string id, string title, int length)
         {
             Id = id;
