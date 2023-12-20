@@ -3,37 +3,36 @@
     x:Class="Streakathon.MAUI.Pages.AddStreakView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
-    <VerticalStackLayout Padding="20" MaximumWidthRequest="800">
-        <Label
-            FontAttributes="Bold"
-            FontSize="Large"
-            Text="Add Streak" />
+    <ScrollView>
+        <VerticalStackLayout Style="{StaticResource PageContainer}">
+            <Label Style="{StaticResource Heading1}" Text="Add Streak" />
+            <VerticalStackLayout Margin="0,50,0,0">
+                <VerticalStackLayout>
+                    <Label FontAttributes="Bold" Text="Title" />
+                    <Entry Margin="0,2,0,0" Text="{Binding Title}" />
+                </VerticalStackLayout>
 
-        <VerticalStackLayout Margin="0,20,0,0">
-            <VerticalStackLayout>
-                <Label Text="Title" />
-                <Entry Margin="0,2,0,0" Text="{Binding Title}" />
+                <VerticalStackLayout Margin="0,20,0,0">
+                    <Label FontAttributes="Bold" Text="Description" />
+                    <Editor
+                        Margin="0,2,0,0"
+                        HeightRequest="100"
+                        Text="{Binding Description}" />
+                </VerticalStackLayout>
+
+                <Button
+                    Margin="0,20,0,0"
+                    Command="{Binding SubmitStreakCommand}"
+                    FontAttributes="Bold"
+                    Style="{StaticResource ButtonPrimary}"
+                    Text="Submit" />
+
+                <ActivityIndicator
+                    Margin="0,20,0,0"
+                    IsRunning="{Binding IsLoading}"
+                    IsVisible="{Binding IsLoading}"
+                    VerticalOptions="Center" />
             </VerticalStackLayout>
-
-            <VerticalStackLayout Margin="0,20,0,0">
-                <Label Text="Description" />
-                <Editor
-                    Margin="0,2,0,0"
-                    HeightRequest="100"
-                    Text="{Binding Description}" />
-            </VerticalStackLayout>
-
-            <Button
-                Margin="0,20,0,0"
-                Command="{Binding SubmitStreakCommand}"
-                FontAttributes="Bold"
-                Text="Submit" />
-
-            <ActivityIndicator
-                Margin="0,20,0,0"
-                IsRunning="{Binding IsLoading}"
-                IsVisible="{Binding IsLoading}"
-                VerticalOptions="Center" />
         </VerticalStackLayout>
-    </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

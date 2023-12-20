@@ -15,7 +15,7 @@
     </ContentPage.Resources>
 
     <ScrollView>
-        <VerticalStackLayout Padding="20,50" MaximumWidthRequest="800">
+        <VerticalStackLayout Style="{StaticResource PageContainer}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
@@ -24,8 +24,7 @@
 
                 <Label
                     Grid.Column="0"
-                    FontAttributes="Bold"
-                    FontSize="42"
+                    Style="{StaticResource Heading1}"
                     Text="Streaks" />
 
                 <Button
