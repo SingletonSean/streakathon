@@ -61,23 +61,19 @@ jobs:
             sha: context.sha
           })
 
-    - name: Move App Installer File
-      shell: pwsh
-      run: Move-Item ./Streakathon.MAUI/appset.appinstaller ./Streakathon.MAUI/bin/Release/net8.0-windows10.0.19041.0/win10-x64/AppPackages/Streakathon.MAUI_${{ steps.extractVersion.outputs.version }}.0_Test/appset.appinstaller
-
-    - name: Zip Release
-      shell: pwsh
-      run: Compress-Archive -Path ./Streakathon.MAUI/bin/Release/net8.0-windows10.0.19041.0/win10-x64/AppPackages/Streakathon.MAUI_${{ steps.extractVersion.outputs.version }}.0_Test -Destination ./Streakathon.zip
-
-    - name: Rename Installer
+    - name: Rename Auto-Update Installer
       shell: pwsh
       run: Rename-Item ./Streakathon.MAUI/bin/Release/net8.0-windows10.0.19041.0/win10-x64/AppPackages/Streakathon.MAUI_${{ steps.extractVersion.outputs.version }}.0_Test/Streakathon.MAUI_${{ steps.extractVersion.outputs.version }}.0_x64.msix AutoUpdate.msix
+
+    - name: Rename Certificate
+      shell: pwsh
+      run: Rename-Item ./Streakathon.MAUI/bin/Release/net8.0-windows10.0.19041.0/win10-x64/AppPackages/Streakathon.MAUI_${{ steps.extractVersion.outputs.version }}.0_Test/Streakathon.MAUI_${{ steps.extractVersion.outputs.version }}.0_x64.cer Streakathon.cer
 
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
         tag_name: v${{ steps.extractVersion.outputs.version }}
         files: | 
-          ./Streakathon.zip
+          ./Streakathon.MAUI/Streakathon.appinstaller
+          ./Streakathon.MAUI/bin/Release/net8.0-windows10.0.19041.0/win10-x64/AppPackages/Streakathon.MAUI_${{ steps.extractVersion.outputs.version }}.0_Test/Streakathon.cer
           ./Streakathon.MAUI/bin/Release/net8.0-windows10.0.19041.0/win10-x64/AppPackages/Streakathon.MAUI_${{ steps.extractVersion.outputs.version }}.0_Test/AutoUpdate.msix
-          ./Streakathon.MAUI/bin/Release/net8.0-windows10.0.19041.0/win10-x64/AppPackages/Streakathon.MAUI_${{ steps.extractVersion.outputs.version }}.0_Test/appset.appinstaller
