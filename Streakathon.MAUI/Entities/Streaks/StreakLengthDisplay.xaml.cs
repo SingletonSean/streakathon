@@ -1,4 +1,3 @@
-
 namespace Streakathon.MAUI.Entities.Streaks;
 
 public partial class StreakLengthDisplay : ContentView

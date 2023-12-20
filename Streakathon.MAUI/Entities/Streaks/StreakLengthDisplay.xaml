@@ -24,7 +24,6 @@
                         Text="{Binding Caption, Source={x:Reference component}}" />
                 </shared:If.True>
             </shared:If>
-
         </VerticalStackLayout>
 
         <RoundRectangle CornerRadius="15" ZIndex="1">
