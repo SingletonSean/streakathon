@@ -55,6 +55,7 @@ namespace Streakathon.MAUI.Pages
                 await _streakStore.AddStreakEntry(Id);
 
                 OnPropertyChanged(nameof(Length));
+                OnPropertyChanged(nameof(LengthScore));
             }
             catch (Exception)
             {
