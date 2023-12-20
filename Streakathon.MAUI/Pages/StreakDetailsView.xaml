@@ -3,33 +3,45 @@
     x:Class="Streakathon.MAUI.Pages.StreakDetailsView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:streaks="clr-namespace:Streakathon.MAUI.Entities.Streaks"
     Title="StreakDetailsView">
-    <VerticalStackLayout Padding="20" MaximumWidthRequest="800">
-        <Label
-            FontAttributes="Bold"
-            FontSize="Large"
-            Text="{Binding Title}" />
+    <ScrollView>
+        <VerticalStackLayout Style="{StaticResource PageContainer}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
 
-        <Label Margin="0,10,0,0" Text="{Binding Description}" />
+                <VerticalStackLayout Grid.Column="0">
+                    <Label Style="{StaticResource Heading1}" Text="{Binding Title}" />
 
-        <HorizontalStackLayout Margin="0,10,0,0">
-            <Label Text="You've completed this streak for" />
-            <Label
-                Padding="5,0"
-                FontAttributes="Bold"
-                Text="{Binding Length}" />
-            <Label Text="consecutive day(s)!" />
-        </HorizontalStackLayout>
+                    <Label Margin="0,20,0,0" Text="{Binding Description}" />
 
-        <Button
-            Margin="0,20,0,0"
-            Command="{Binding StreakCheckInCommand}"
-            Text="Check-In" />
+                    <Button
+                        Margin="0,20,0,0"
+                        Command="{Binding StreakCheckInCommand}"
+                        HorizontalOptions="Start"
+                        Style="{StaticResource ButtonPrimary}"
+                        Text="Check-In" />
 
-        <ActivityIndicator
-            Margin="0,20,0,0"
-            IsRunning="{Binding IsLoading}"
-            IsVisible="{Binding IsLoading}"
-            VerticalOptions="Center" />
-    </VerticalStackLayout>
+                    <ActivityIndicator
+                        Margin="0,20,0,0"
+                        IsRunning="{Binding IsLoading}"
+                        IsVisible="{Binding IsLoading}"
+                        VerticalOptions="Center" />
+                </VerticalStackLayout>
+
+                <Grid
+                    Grid.Column="1"
+                    Margin="20,0,0,0"
+                    VerticalOptions="Start">
+                    <streaks:StreakLengthDisplay
+                        Caption="Consecutive Days"
+                        Length="{Binding Length}"
+                        LengthScore="{Binding LengthScore}" />
+                </Grid>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

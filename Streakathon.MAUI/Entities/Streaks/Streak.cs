@@ -52,6 +52,24 @@
             }
         }
 
+        public StreakLengthScore LengthScore
+        {
+            get
+            {
+                if (Length == 0)
+                {
+                    return StreakLengthScore.BAD;
+                }
+
+                if (Length < 10)
+                {
+                    return StreakLengthScore.MEDIUM;
+                }
+
+                return StreakLengthScore.GOOD;
+            }
+        }
+
         public Streak() 
         {
             _entries = new List<StreakEntry>();

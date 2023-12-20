@@ -94,7 +94,7 @@ namespace Streakathon.MAUI.Pages
 
         private static StreakOverviewViewModel ToStreakOverviewViewModel(Streak streak)
         {
-            return new StreakOverviewViewModel(streak.Id, streak.Title, streak.Length);
+            return new StreakOverviewViewModel(streak);
         }
 
         private void StreakOverviewViewModels_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

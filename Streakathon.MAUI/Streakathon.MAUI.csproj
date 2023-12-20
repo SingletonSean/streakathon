@@ -52,6 +52,9 @@
     <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
   </ItemGroup>
   <ItemGroup>
+    <MauiXaml Update="Entities\Streaks\StreakLengthDisplay.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
     <MauiXaml Update="Pages\AddStreakView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>

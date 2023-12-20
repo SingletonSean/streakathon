@@ -62,44 +62,10 @@
                                         <ColumnDefinition Width="auto" />
                                     </Grid.ColumnDefinitions>
 
-                                    <Grid
+                                    <streaks:StreakLengthDisplay
                                         Grid.Column="0"
-                                        HeightRequest="100"
-                                        WidthRequest="100">
-                                        <Label
-                                            FontAttributes="Bold"
-                                            FontSize="48"
-                                            HorizontalOptions="Center"
-                                            Text="{Binding Length}"
-                                            VerticalOptions="Center"
-                                            ZIndex="2" />
-                                        <RoundRectangle CornerRadius="15" ZIndex="1">
-                                            <RoundRectangle.Style>
-                                                <Style TargetType="RoundRectangle">
-                                                    <Style.Triggers>
-                                                        <DataTrigger
-                                                            Binding="{Binding LengthScore}"
-                                                            TargetType="RoundRectangle"
-                                                            Value="{x:Static streaks:StreakLengthScore.BAD}">
-                                                            <Setter Property="BackgroundColor" Value="#FF5E5E" />
-                                                        </DataTrigger>
-                                                        <DataTrigger
-                                                            Binding="{Binding LengthScore}"
-                                                            TargetType="RoundRectangle"
-                                                            Value="{x:Static streaks:StreakLengthScore.MEDIUM}">
-                                                            <Setter Property="BackgroundColor" Value="#FFF38A" />
-                                                        </DataTrigger>
-                                                        <DataTrigger
-                                                            Binding="{Binding LengthScore}"
-                                                            TargetType="RoundRectangle"
-                                                            Value="{x:Static streaks:StreakLengthScore.GOOD}">
-                                                            <Setter Property="BackgroundColor" Value="#5BEC6A" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </RoundRectangle.Style>
-                                        </RoundRectangle>
-                                    </Grid>
+                                        Length="{Binding Length}"
+                                        LengthScore="{Binding LengthScore}" />
 
                                     <VerticalStackLayout
                                         Grid.Column="1"

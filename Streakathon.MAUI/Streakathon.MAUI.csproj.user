@@ -10,6 +10,9 @@
     <PackageOptionalProjectsInIdeBuilds>False</PackageOptionalProjectsInIdeBuilds>
   </PropertyGroup>
   <ItemGroup>
+    <MauiXaml Update="Entities\Streaks\StreakLengthDisplay.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="Pages\AddStreakView.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>

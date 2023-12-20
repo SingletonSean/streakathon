@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="Streakathon.MAUI.Entities.Streaks.StreakLengthDisplay"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:shared="clr-namespace:Streakathon.MAUI.Shared.Components"
+    xmlns:streaks="clr-namespace:Streakathon.MAUI.Entities.Streaks"
+    x:Name="component">
+    <Grid HeightRequest="100" WidthRequest="100">
+        <VerticalStackLayout
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            ZIndex="2">
+            <Label
+                FontAttributes="Bold"
+                FontSize="48"
+                HorizontalTextAlignment="Center"
+                Text="{Binding Length, Source={x:Reference component}}" />
+            <shared:If Condition="{Binding HasCaption, Source={x:Reference component}}">
+                <shared:If.True>
+                    <Label
+                        FontSize="10"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding Caption, Source={x:Reference component}}" />
+                </shared:If.True>
+            </shared:If>
+
+        </VerticalStackLayout>
+
+        <RoundRectangle CornerRadius="15" ZIndex="1">
+            <RoundRectangle.Style>
+                <Style TargetType="RoundRectangle">
+                    <Style.Triggers>
+                        <DataTrigger
+                            Binding="{Binding LengthScore, Source={x:Reference component}}"
+                            TargetType="RoundRectangle"
+                            Value="{x:Static streaks:StreakLengthScore.BAD}">
+                            <Setter Property="BackgroundColor" Value="#FF5E5E" />
+                        </DataTrigger>
+                        <DataTrigger
+                            Binding="{Binding LengthScore, Source={x:Reference component}}"
+                            TargetType="RoundRectangle"
+                            Value="{x:Static streaks:StreakLengthScore.MEDIUM}">
+                            <Setter Property="BackgroundColor" Value="#FFF38A" />
+                        </DataTrigger>
+                        <DataTrigger
+                            Binding="{Binding LengthScore, Source={x:Reference component}}"
+                            TargetType="RoundRectangle"
+                            Value="{x:Static streaks:StreakLengthScore.GOOD}">
+                            <Setter Property="BackgroundColor" Value="#5BEC6A" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </RoundRectangle.Style>
+        </RoundRectangle>
+    </Grid>
+</ContentView>

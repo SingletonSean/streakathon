@@ -5,33 +5,16 @@ namespace Streakathon.MAUI.Entities.Streaks
 {
     public partial class StreakOverviewViewModel : ObservableObject
     {
-        public string Id { get; }
-        public string Title { get; }
-        public int Length { get; }
+        private readonly Streak _streak;
 
-        public StreakLengthScore LengthScore
+        public string Id => _streak.Id;
+        public string Title => _streak.Title;
+        public int Length => _streak.Length;
+        public StreakLengthScore LengthScore => _streak.LengthScore;
+
+        public StreakOverviewViewModel(Streak streak)
         {
-            get
-            {
-                if (Length == 0)
-                {
-                    return StreakLengthScore.BAD;
-                }
-
-                if (Length < 10)
-                {
-                    return StreakLengthScore.MEDIUM;
-                }
-
-                return StreakLengthScore.GOOD;
-            }
-        } 
-
-        public StreakOverviewViewModel(string id, string title, int length)
-        {
-            Id = id;
-            Title = title;
-            Length = length;
+            _streak = streak;
         }
 
         [RelayCommand]

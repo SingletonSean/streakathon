@@ -51,8 +51,6 @@
                 </Setter>
             </Style>
 
-            <Style TargetType="Entry" />
-
             <Style x:Key="Heading1" TargetType="Label">
                 <Setter Property="FontAttributes" Value="Bold" />
                 <Setter Property="FontSize" Value="42" />

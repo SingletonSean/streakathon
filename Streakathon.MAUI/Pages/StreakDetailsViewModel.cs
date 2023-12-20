@@ -29,11 +29,13 @@ namespace Streakathon.MAUI.Pages
         [NotifyPropertyChangedFor(nameof(Title))]
         [NotifyPropertyChangedFor(nameof(Description))]
         [NotifyPropertyChangedFor(nameof(Length))]
+        [NotifyPropertyChangedFor(nameof(LengthScore))]
         private Streak _currentStreak;
 
         public string Title => CurrentStreak?.Title;
         public string Description => CurrentStreak?.Description;
         public int Length => CurrentStreak?.Length ?? 0;
+        public StreakLengthScore LengthScore => CurrentStreak?.LengthScore ?? StreakLengthScore.BAD;
 
         [ObservableProperty]
         private bool _isLoading;
