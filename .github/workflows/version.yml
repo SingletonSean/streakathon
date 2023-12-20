@@ -61,17 +61,17 @@ jobs:
         $xml.Project.PropertyGroup.ApplicationDisplayVersion = $newVersion
         $xml.Save("./Streakathon.MAUI/Streakathon.MAUI.csproj")
 
-        $appinstallerXml = [Xml] (Get-Content ./Streakathon.MAUI/appset.appinstaller)
+        $appinstallerXml = [Xml] (Get-Content ./Streakathon.MAUI/Streakathon.appinstaller)
         $appinstallerNewVersion = "{0}.{1}.{2}.0" -f $major, $minor, $patch
         $appinstallerXml.AppInstaller.MainPackage.Version = $appinstallerNewVersion
-        $appinstallerXml.Save("./Streakathon.MAUI/appset.appinstaller")
+        $appinstallerXml.Save("./Streakathon.MAUI/Streakathon.appinstaller")
 
     - name: Commit Version Bump
       run: |
         git config user.name "GitHub Actions Bot"
         git config user.email "<>"
         git add ./Streakathon.MAUI/Streakathon.MAUI.csproj
-        git add ./Streakathon.MAUI/appset.appinstaller
+        git add ./Streakathon.MAUI/Streakathon.appinstaller
         git commit -m "Bump version"
 
     - name: Push Version Bump
