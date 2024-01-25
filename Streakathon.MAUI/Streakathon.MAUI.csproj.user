@@ -19,6 +19,12 @@
     <MauiXaml Update="Pages\HomeView.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="Pages\SignInView.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Pages\SignUpView.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="Pages\StreakDetailsView.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>

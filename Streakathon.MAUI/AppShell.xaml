@@ -8,7 +8,17 @@
     Shell.NavBarIsVisible="False">
 
     <ShellContent
+        Title="Sign Up"
+        ContentTemplate="{DataTemplate pages:SignUpView}"
+        Route="SignUp" />
+
+    <ShellContent
+        Title="Sign In"
+        ContentTemplate="{DataTemplate pages:SignInView}"
+        Route="SignIn" />
+
+    <ShellContent
         Title="Streaks"
         ContentTemplate="{DataTemplate pages:HomeView}"
-        Route="Streak" />
+        Route="Streaks" />
 </Shell>

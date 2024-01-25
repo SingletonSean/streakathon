@@ -8,7 +8,7 @@ public partial class AppShell : Shell
 	{
 		InitializeComponent();
 
-        Routing.RegisterRoute("Streak/New", typeof(AddStreakView));
-        Routing.RegisterRoute("Streak/Details", typeof(StreakDetailsView));
+        Routing.RegisterRoute("Streaks/New", typeof(AddStreakView));
+        Routing.RegisterRoute("Streaks/Details", typeof(StreakDetailsView));
     }
 }

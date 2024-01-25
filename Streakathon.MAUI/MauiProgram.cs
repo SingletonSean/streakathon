@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Maui;
+using Firebase.Auth;
+using Firebase.Auth.Providers;
 using Microsoft.Extensions.Logging;
 using Refit;
 using Streakathon.MAUI.Entities.Streaks;
@@ -27,6 +29,16 @@ public static class MauiProgram
 
         IServiceCollection services = builder.Services;
 
+        services.AddSingleton(new FirebaseAuthClient(new FirebaseAuthConfig()
+        {
+            ApiKey = "AIzaSyC90ghgJuy9qyY7K8rTiSZg56FC0VbVaHQ",
+            AuthDomain = "streakathon.firebaseapp.com",
+            Providers =
+            [
+                new EmailProvider()
+            ]
+        }));
+
 		services.AddSingleton<GetAllStreaksQuery>();
 		services.AddSingleton<CreateStreakCommand>();
 		services.AddSingleton<CreateStreakEntryCommand>();
@@ -40,6 +52,12 @@ public static class MauiProgram
 
         services.AddTransient<StreakDetailsViewModel>();
         services.AddTransient<StreakDetailsView>();
+
+        services.AddTransient<SignUpViewModel>();
+        services.AddTransient<SignUpView>();
+
+        services.AddTransient<SignInViewModel>();
+        services.AddTransient<SignInView>();
 
         services.AddRefitClient<IGetAllStreaksQuery>().ConfigureHttpClient(c =>
 		{
