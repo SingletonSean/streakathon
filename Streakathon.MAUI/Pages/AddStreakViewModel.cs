@@ -32,7 +32,7 @@ namespace Streakathon.MAUI.Pages
                 NewStreak streak = new NewStreak(Title, Description);
                 await _streakStore.Create(streak);
 
-                await Shell.Current.GoToAsync("//Streak");
+                await Shell.Current.GoToAsync("//Streaks");
 
                 Title = string.Empty;
                 Description = string.Empty;
