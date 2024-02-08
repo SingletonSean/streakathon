@@ -7,6 +7,7 @@ using Streakathon.MAUI.Entities.Streaks;
 using Streakathon.MAUI.Entities.Streaks.Data;
 using Streakathon.MAUI.Entities.Users;
 using Streakathon.MAUI.Pages;
+using Serilog;
 
 namespace Streakathon.MAUI;
 
@@ -15,6 +16,7 @@ public static class MauiProgram
 	public static MauiApp CreateMauiApp()
 	{
 		var builder = MauiApp.CreateBuilder();
+
 		builder
 			.UseMauiApp<App>()
 			.UseMauiCommunityToolkit()
@@ -29,6 +31,12 @@ public static class MauiProgram
 #endif
 
         IServiceCollection services = builder.Services;
+
+        services.AddSerilog(
+            new LoggerConfiguration()
+                .WriteTo.Debug()
+                .WriteTo.File(Path.Combine(FileSystem.Current.AppDataDirectory, "log.txt"), rollingInterval: RollingInterval.Day)
+                .CreateLogger());
 
         services.AddSingleton(new FirebaseAuthClient(new FirebaseAuthConfig()
         {
