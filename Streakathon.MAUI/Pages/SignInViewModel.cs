@@ -44,7 +44,7 @@ namespace Streakathon.MAUI.Pages
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to sign in");
+                _logger.LogError("Failed to sign in: {StackTrace}", ex.StackTrace);
 
                 await Shell.Current.DisplayAlert("Error", "Failed to sign in. Please try again later.", "Ok");
             }

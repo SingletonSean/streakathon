@@ -35,7 +35,7 @@ public static class MauiProgram
         services.AddSerilog(
             new LoggerConfiguration()
                 .WriteTo.Debug()
-                .WriteTo.File(Path.Combine(FileSystem.Current.AppDataDirectory, "log.txt"), rollingInterval: RollingInterval.Day)
+                .WriteTo.File(Path.Combine(FileSystem.Current.AppDataDirectory, "logs", "log.txt"), rollingInterval: RollingInterval.Day)
                 .CreateLogger());
 
         services.AddSingleton(new FirebaseAuthClient(new FirebaseAuthConfig()
