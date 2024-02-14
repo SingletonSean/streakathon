@@ -64,6 +64,14 @@ namespace Streakathon.MAUI.Pages
             await Shell.Current.GoToAsync("New");
         }
 
+        [RelayCommand]
+        private async Task SignOut()
+        {
+            _authClient.SignOut();
+
+            await Shell.Current.GoToAsync("//SignIn");
+        }
+
         private void UpdateStreaks()
         {
             _streakOverviewViewModels.Clear();
