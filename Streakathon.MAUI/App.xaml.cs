@@ -1,11 +1,33 @@
-﻿namespace Streakathon.MAUI;
+﻿using Firebase.Auth;
+
+namespace Streakathon.MAUI;
 
 public partial class App : Application
 {
-	public App()
+    private readonly FirebaseAuthClient _authClient;
+
+    public App(FirebaseAuthClient authClient)
 	{
-		InitializeComponent();
+        _authClient = authClient;
+
+        InitializeComponent();
 
 		MainPage = new AppShell();
-	}
+    }
+
+    protected override void OnStart()
+    {
+        MainPage = new AppShell();
+
+        if (_authClient.User == null)
+        {
+            Shell.Current.GoToAsync("//SignIn");
+        }
+        else
+        {
+            Shell.Current.GoToAsync("//Streaks");
+        }
+
+        base.OnStart();
+    }
 }
