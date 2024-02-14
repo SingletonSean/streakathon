@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Firebase.Auth;
 using Streakathon.MAUI.Entities.Streaks;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -11,6 +12,8 @@ namespace Streakathon.MAUI.Pages
     public partial class HomeViewModel : ObservableValidator
     {
         private readonly StreakStore _streakStore;
+        private readonly FirebaseAuthClient _authClient;
+
         private readonly ObservableCollection<StreakOverviewViewModel> _streakOverviewViewModels;
 
         public IEnumerable<StreakOverviewViewModel> StreakOverviewViewModels => _streakOverviewViewModels;
@@ -20,9 +23,10 @@ namespace Streakathon.MAUI.Pages
 
         public bool HasStreaks => StreakOverviewViewModels.Count() > 0;
 
-        public HomeViewModel(StreakStore streakStore)
+        public HomeViewModel(StreakStore streakStore, FirebaseAuthClient authClient)
         {
             _streakStore = streakStore;
+            _authClient = authClient;
             _streakOverviewViewModels = new ObservableCollection<StreakOverviewViewModel>();
 
             StrongReferenceMessenger.Default.Register<StreakAddedMessage>(this, OnStreakAdded);
@@ -40,7 +44,7 @@ namespace Streakathon.MAUI.Pages
 
             try
             {
-                await _streakStore.Load();
+                await _streakStore.Load(_authClient.User.Uid);
 
                 UpdateStreaks();
             } 

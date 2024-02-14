@@ -5,9 +5,9 @@ namespace Streakathon.MAUI.Entities.Streaks.Data
 {
     public interface IGetAllStreaksQuery
     {
-        [Get("/streaks")]
-        Task<GetAllStreaksQueryResponse> Execute();
+        [Post("/documents:runQuery")]
+        Task<IEnumerable<StreakCollectionGroupItem>> Execute([Body] FirestoreRunQueryRequest request);
     }
 
-    public class GetAllStreaksQueryResponse : FirestoreDocumentList<FirestoreStreakFields> { }
+    public class StreakCollectionGroupItem : FirestoreCollectionGroupItem<FirestoreStreakFields> { }
 }

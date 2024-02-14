@@ -6,5 +6,6 @@ namespace Streakathon.MAUI.Entities.Streaks.Data
     {
         public FirestoreStringField Title { get; set; }
         public FirestoreStringField Description { get; set; }
+        public FirestoreStringField UserId { get; set; }
     }
 }

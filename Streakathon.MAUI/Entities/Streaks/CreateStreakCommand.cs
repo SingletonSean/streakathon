@@ -26,6 +26,10 @@ namespace Streakathon.MAUI.Entities.Streaks
                         Description = new FirestoreStringField()
                         {
                             StringValue = newStreak.Description
+                        },
+                        UserId = new FirestoreStringField()
+                        {
+                            StringValue = newStreak.UserId
                         }
                     }
                 });

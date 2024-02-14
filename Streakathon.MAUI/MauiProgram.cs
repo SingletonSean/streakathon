@@ -8,6 +8,7 @@ using Streakathon.MAUI.Entities.Streaks.Data;
 using Streakathon.MAUI.Entities.Users;
 using Streakathon.MAUI.Pages;
 using Serilog;
+using Firebase.Auth.Repository;
 
 namespace Streakathon.MAUI;
 
@@ -45,7 +46,8 @@ public static class MauiProgram
             Providers =
             [
                 new EmailProvider()
-            ]
+            ],
+            UserRepository = new FileUserRepository("Streakathon")
         }));
 
 		services.AddSingleton<GetAllStreaksQuery>();
@@ -72,7 +74,7 @@ public static class MauiProgram
 
         services.AddRefitClient<IGetAllStreaksQuery>().ConfigureHttpClient(c =>
 		{
-			c.BaseAddress = new Uri("https://firestore.googleapis.com/v1/projects/streakathon/databases/(default)/documents");
+			c.BaseAddress = new Uri("https://firestore.googleapis.com/v1/projects/streakathon/databases/(default)");
         }).AddHttpMessageHandler<CurrentUserAuthHttpMessageHandler>();
 
         services.AddRefitClient<IGetAllStreakEntriesQuery>().ConfigureHttpClient(c =>

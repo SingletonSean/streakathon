@@ -19,16 +19,48 @@ namespace Streakathon.MAUI.Entities.Streaks
             _getAllStreakEntriesQuery = getAllStreakEntriesQuery;
         }
 
-        public async Task<IEnumerable<Streak>> Execute()
+        public async Task<IEnumerable<Streak>> Execute(string userId)
         {
-            GetAllStreaksQueryResponse streaksResponse = await _getAllStreaksQuery.Execute();
+            IEnumerable<StreakCollectionGroupItem> streaksResponse = await _getAllStreaksQuery.Execute(
+                new FirestoreRunQueryRequest()
+                {
+                    StructuredQuery = new FirestoreStructuredQuery()
+                    {
+                        From = new List<FirestoreFromItem>()
+                        {
+                            new FirestoreFromItem()
+                            {
+                                CollectionId = "streaks"
+                            }
+                        },
+                        Where = new FirestoreWhereItem()
+                        {
+                            FieldFilter = new FirestoreFieldFilter()
+                            {
+                                Field = new FirestoreField()
+                                {
+                                    FieldPath = "userId"
+                                },
+                                Op = "EQUAL",
+                                Value = new FirestoreStringField()
+                                {
+                                    StringValue = userId
+                                }
+                            }
+                        }
+                    }
+                }
+            );
 
-            IEnumerable<Streak> streaks = streaksResponse.Documents?.Select(d => new Streak()
-            {
-                Id = d.Name.Split("/").LastOrDefault(),
-                Title = d.Fields.Title.StringValue,
-                Description = d.Fields.Description.StringValue,
-            }).ToList();
+            IEnumerable<Streak> streaks = streaksResponse
+                .Where(d => d.Document != null)
+                .Select(d => new Streak()
+                {
+                    Id = d.Document.Name.Split("/").LastOrDefault(),
+                    Title = d.Document.Fields.Title.StringValue,
+                    Description = d.Document.Fields.Description.StringValue,
+                })
+                .ToList();
 
             if (streaks == null || !streaks.Any())
             {
@@ -46,6 +78,21 @@ namespace Streakathon.MAUI.Entities.Streaks
                             {
                                 CollectionId = "entries",
                                 AllDescendants = true
+                            }
+                        },
+                        Where = new FirestoreWhereItem()
+                        {
+                            FieldFilter = new FirestoreFieldFilter()
+                            {
+                                Field = new FirestoreField()
+                                {
+                                    FieldPath = "userId"
+                                },
+                                Op = "EQUAL",
+                                Value = new FirestoreStringField()
+                                {
+                                    StringValue = userId
+                                }
                             }
                         }
                     }

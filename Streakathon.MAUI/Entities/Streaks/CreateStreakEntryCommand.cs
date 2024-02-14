@@ -12,7 +12,7 @@ namespace Streakathon.MAUI.Entities.Streaks
             _createStreakEntryCommand = createStreakEntryCommand;
         }
 
-        public async Task<StreakEntry> Execute(string streakId)
+        public async Task<StreakEntry> Execute(string userId, string streakId)
         {
             CreateStreakEntryCommandRequest request = new CreateStreakEntryCommandRequest()
             {
@@ -21,6 +21,10 @@ namespace Streakathon.MAUI.Entities.Streaks
                     Created = new FirestoreTimestampField()
                     {
                         TimestampValue = DateTime.Now
+                    },
+                    UserId = new FirestoreStringField()
+                    {
+                        StringValue = userId
                     }
                 }
             };
@@ -30,7 +34,8 @@ namespace Streakathon.MAUI.Entities.Streaks
             return new StreakEntry(
                 response.StreakEntryId, 
                 response.StreakId,
-                response.Fields.Created.TimestampValue);
+                response.Fields.Created.TimestampValue
+            );
         }
     }
 }

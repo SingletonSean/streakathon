@@ -23,9 +23,9 @@ namespace Streakathon.MAUI.Entities.Streaks
             _streaks = new List<Streak>();
         }
 
-        public async Task Load()
+        public async Task Load(string userId)
         {
-            IEnumerable<Streak> streaks = await _getAllStreaksQuery.Execute();
+            IEnumerable<Streak> streaks = await _getAllStreaksQuery.Execute(userId);
 
             _streaks.Clear();
             _streaks.AddRange(streaks);
@@ -40,9 +40,9 @@ namespace Streakathon.MAUI.Entities.Streaks
             StrongReferenceMessenger.Default.Send(new StreakAddedMessage(streak));
         }
 
-        public async Task AddStreakEntry(string streakId)
+        public async Task AddStreakEntry(string userId, string streakId)
         {
-            StreakEntry streakEntry = await _createStreakEntryCommand.Execute(streakId);
+            StreakEntry streakEntry = await _createStreakEntryCommand.Execute(userId, streakId);
 
             Streak streak = _streaks.FirstOrDefault(s => s.Id == streakEntry.StreakId);
             streak?.AddEntry(streakEntry);

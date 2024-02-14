@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Firebase.Auth;
 using Streakathon.MAUI.Entities.Streaks;
 
 namespace Streakathon.MAUI.Pages
@@ -7,6 +8,7 @@ namespace Streakathon.MAUI.Pages
     public partial class AddStreakViewModel : ObservableObject
     {
         private readonly StreakStore _streakStore;
+        private readonly FirebaseAuthClient _authClient;
 
         [ObservableProperty]
         private string _title;
@@ -17,9 +19,10 @@ namespace Streakathon.MAUI.Pages
         [ObservableProperty]
         private bool _isLoading;
 
-        public AddStreakViewModel(StreakStore streakStore)
+        public AddStreakViewModel(StreakStore streakStore, FirebaseAuthClient authClient)
         {
             _streakStore = streakStore;
+            _authClient = authClient;
         }
 
         [RelayCommand]
@@ -29,7 +32,7 @@ namespace Streakathon.MAUI.Pages
 
             try 
             { 
-                NewStreak streak = new NewStreak(Title, Description);
+                NewStreak streak = new NewStreak(Title, Description, _authClient.User.Uid);
                 await _streakStore.Create(streak);
 
                 await Shell.Current.GoToAsync("//Streaks");
