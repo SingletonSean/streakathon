@@ -3,6 +3,7 @@ using Firebase.Auth;
 using Firebase.Auth.Providers;
 using Microsoft.Extensions.Logging;
 using Refit;
+using Serilog;
 using Streakathon.MAUI.Entities.Streaks;
 using Streakathon.MAUI.Entities.Streaks.Data;
 using Streakathon.MAUI.Entities.Users;
@@ -29,6 +30,12 @@ public static class MauiProgram
 #endif
 
         IServiceCollection services = builder.Services;
+
+        services.AddSerilog(
+            new LoggerConfiguration()
+                .WriteTo.Debug()
+                .WriteTo.File(Path.Combine(FileSystem.Current.AppDataDirectory, "log.txt"), rollingInterval: RollingInterval.Day)
+                .CreateLogger());
 
         services.AddSingleton(new FirebaseAuthClient(new FirebaseAuthConfig()
         {

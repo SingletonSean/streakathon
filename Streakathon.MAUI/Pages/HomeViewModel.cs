@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.Logging;
 using Streakathon.MAUI.Entities.Streaks;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -10,6 +11,8 @@ namespace Streakathon.MAUI.Pages
 {
     public partial class HomeViewModel : ObservableValidator
     {
+        private readonly ILogger<HomeViewModel> _logger;
+
         private readonly StreakStore _streakStore;
         private readonly ObservableCollection<StreakOverviewViewModel> _streakOverviewViewModels;
 
@@ -20,9 +23,11 @@ namespace Streakathon.MAUI.Pages
 
         public bool HasStreaks => StreakOverviewViewModels.Count() > 0;
 
-        public HomeViewModel(StreakStore streakStore)
+        public HomeViewModel(StreakStore streakStore, ILogger<HomeViewModel> logger)
         {
             _streakStore = streakStore;
+            _logger = logger;
+
             _streakOverviewViewModels = new ObservableCollection<StreakOverviewViewModel>();
 
             StrongReferenceMessenger.Default.Register<StreakAddedMessage>(this, OnStreakAdded);
@@ -41,6 +46,8 @@ namespace Streakathon.MAUI.Pages
             try
             {
                 await _streakStore.Load();
+
+                _logger.LogInformation("Loaded streaks: {Count}", _streakStore.Streaks.Count());
 
                 UpdateStreaks();
             } 
