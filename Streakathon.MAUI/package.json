@@ -1,0 +1,11 @@
+{
+  "name": "streakathon.maui",
+  "version": "1.0.0",
+  "private": "true",
+  "scripts": {
+    "changeset": "changeset"
+  },
+  "dependencies": {
+    "@changesets/cli": "^2.27.1"
+  }
+}
