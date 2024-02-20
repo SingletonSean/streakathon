@@ -11,7 +11,7 @@
     <SingleProject>true</SingleProject>
     <ImplicitUsings>enable</ImplicitUsings>
     <!-- Display name -->
-    <ApplicationTitle>Streakathon.MAUI</ApplicationTitle>
+    <ApplicationTitle>Streakathon</ApplicationTitle>
     <!-- App Identifier -->
     <ApplicationId>com.companyname.streakathon.maui</ApplicationId>
     <ApplicationIdGuid>e299e9a1-12ac-49f8-9e2a-c6865b5bbde9</ApplicationIdGuid>
@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- App Icon -->
-    <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+    <MauiIcon Include="Resources\AppIcon\appicon.svg" />
     <!-- Splash Screen -->
     <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
     <!-- Images -->
