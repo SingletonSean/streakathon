@@ -34,11 +34,10 @@ jobs:
     - name: Sync Changesets Version
       shell: pwsh
       run: |
-        $xml = [Xml] (Get-Content ./Streakathon.MAUI/Streakathon.MAUI.csproj)
-
         $package = Get-Content -Raw ./Streakathon.MAUI/package.json | ConvertFrom-Json
         $version = $package.version
 
+        $xml = [Xml] (Get-Content ./Streakathon.MAUI/Streakathon.MAUI.csproj)
         $xml.Project.PropertyGroup.ApplicationDisplayVersion = $version
         $xml.Save("./Streakathon.MAUI/Streakathon.MAUI.csproj")
 
