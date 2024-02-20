@@ -2,16 +2,6 @@
 
 on:
   workflow_dispatch:
-    inputs:
-      versionType:
-        description: 'Choose the type of semantic version bump.'
-        required: true
-        default: 'minor'
-        type: choice
-        options:
-          - major
-          - minor
-          - patch
 
 permissions:
   actions: write
@@ -28,41 +18,32 @@ jobs:
         token: ${{ secrets.PAT }}
         fetch-depth: 0
 
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 21.x
+
+    - name: Install NPM Packages
+      run: npm ci
+      working-directory: ./Streakathon.MAUI
+
     - name: Bump Version
+      run: npm run version
+      working-directory: ./Streakathon.MAUI
+
+    - name: Sync Changesets Version
       shell: pwsh
       run: |
         $xml = [Xml] (Get-Content ./Streakathon.MAUI/Streakathon.MAUI.csproj)
-        $version = [Version] $xml.Project.PropertyGroup.ApplicationDisplayVersion
 
-        $major = $version.Major
-        $minor = $version.Minor
-        $patch = $version.Build
+        $package = Get-Content -Raw ./Streakathon.MAUI/package.json | ConvertFrom-Json
+        $version = $package.version
 
-        switch("${{ inputs.versionType }}") 
-        {
-            "major"
-            {
-                $major = $major + 1
-                $minor = 0
-                $patch = 0
-            }
-            "minor"
-            {
-                $minor = $minor + 1
-                $patch = 0
-            }
-            "patch"
-            {
-                $patch = $patch + 1
-            }
-        }
-
-        $newVersion = "{0}.{1}.{2}" -f $major, $minor, $patch
-        $xml.Project.PropertyGroup.ApplicationDisplayVersion = $newVersion
+        $xml.Project.PropertyGroup.ApplicationDisplayVersion = $version
         $xml.Save("./Streakathon.MAUI/Streakathon.MAUI.csproj")
 
         $appinstallerXml = [Xml] (Get-Content ./Streakathon.MAUI/Streakathon.appinstaller)
-        $appinstallerNewVersion = "{0}.{1}.{2}.0" -f $major, $minor, $patch
+        $appinstallerNewVersion = "{0}.0" -f $version
         $appinstallerXml.AppInstaller.MainPackage.Version = $appinstallerNewVersion
         $appinstallerXml.Save("./Streakathon.MAUI/Streakathon.appinstaller")
 
@@ -72,6 +53,9 @@ jobs:
         git config user.email "<>"
         git add ./Streakathon.MAUI/Streakathon.MAUI.csproj
         git add ./Streakathon.MAUI/Streakathon.appinstaller
+        git add ./Streakathon.MAUI/CHANGELOG.md
+        git add ./Streakathon.MAUI/.changeset
+        git add ./Streakathon.MAUI/package.json
         git commit -m "Bump version"
 
     - name: Push Version Bump
