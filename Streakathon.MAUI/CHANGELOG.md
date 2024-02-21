@@ -1,5 +1,11 @@
 # streakathon.maui
 
+## 2.0.1
+
+### Patch Changes
+
+- add changeset action
+
 ## 2.0.0
 
 ### Major Changes
