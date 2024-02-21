@@ -2,4 +2,4 @@
 "streakathon.maui": patch
 ---
 
-re-order version workflow
+add changeset action

@@ -27,6 +27,7 @@ jobs:
         cwd: ./Streakathon.MAUI
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        HOME: ${{ github.workspace }}
 
     - name: Sync Changesets Version
       shell: pwsh
@@ -43,12 +44,11 @@ jobs:
         $appinstallerXml.AppInstaller.MainPackage.Version = $appinstallerNewVersion
         $appinstallerXml.Save("./Streakathon.MAUI/Streakathon.appinstaller")
 
-    - name: Commit Version Bump
+    - name: Commit Version Sync
       run: |
-        git config user.name "GitHub Actions Bot"
-        git config user.email "<>"
-        git add .
-        git commit --amend --no-verify
+        git add ./Streakathon.MAUI/Streakathon.MAUI.csproj
+        git add ./Streakathon.MAUI/Streakathon.appinstaller
+        git commit -m "Version Packages" --amend --no-verify
 
     - name: Push Version Bump
-      run: git push origin version
+      run: git push origin changeset-release/master -f
