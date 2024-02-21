@@ -1,11 +1,8 @@
 ﻿name: Version
 
 on:
-  workflow_dispatch:
-
-permissions:
-  actions: write
-  contents: write
+  push:
+    branches: [ "master" ]
 
 jobs:
   build:
@@ -14,9 +11,6 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-      with:
-        token: ${{ secrets.PAT }}
-        fetch-depth: 0
 
     - name: Setup Node
       uses: actions/setup-node@v4
@@ -27,9 +21,12 @@ jobs:
       run: npm ci
       working-directory: ./Streakathon.MAUI
 
-    - name: Bump Version
-      run: npm run version
-      working-directory: ./Streakathon.MAUI
+    - name: Create Release Pull Request
+      uses: changesets/action@v1
+      with:
+        cwd: ./Streakathon.MAUI
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Sync Changesets Version
       shell: pwsh
@@ -50,20 +47,8 @@ jobs:
       run: |
         git config user.name "GitHub Actions Bot"
         git config user.email "<>"
-        git add ./Streakathon.MAUI/Streakathon.MAUI.csproj
-        git add ./Streakathon.MAUI/Streakathon.appinstaller
-        git add ./Streakathon.MAUI/CHANGELOG.md
-        git add ./Streakathon.MAUI/.changeset
-        git add ./Streakathon.MAUI/package.json
-        git commit -m "Bump version"
+        git add .
+        git commit --amend --no-verify
 
     - name: Push Version Bump
-      run: |
-        git push origin master
-
-    - name: Master -> Release
-      run: |
-        git fetch origin release
-        git checkout -b release origin/release
-        git merge master
-        git push origin release
+      run: git push origin version
