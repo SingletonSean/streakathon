@@ -1,5 +1,11 @@
 # streakathon.maui
 
+## 2.0.1
+
+### Patch Changes
+
+- d2345c3: add application title
+
 ## 2.0.0
 
 ### Major Changes
