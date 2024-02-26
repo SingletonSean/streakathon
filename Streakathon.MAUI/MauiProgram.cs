@@ -39,7 +39,7 @@ public static class MauiProgram
                 .WriteTo.File(Path.Combine(FileSystem.Current.AppDataDirectory, "logs", "log.txt"), rollingInterval: RollingInterval.Day)
                 .CreateLogger());
 
-        services.AddSingleton(new FirebaseAuthClient(new FirebaseAuthConfig()
+        services.AddSingleton<IFirebaseAuthClient>(new FirebaseAuthClient(new FirebaseAuthConfig()
         {
             ApiKey = "AIzaSyC90ghgJuy9qyY7K8rTiSZg56FC0VbVaHQ",
             AuthDomain = "streakathon.firebaseapp.com",

@@ -10,9 +10,9 @@ namespace Streakathon.MAUI.Entities.Users
 {
     public class CurrentUserAuthHttpMessageHandler : DelegatingHandler
     {
-        private readonly FirebaseAuthClient _authClient;
+        private readonly IFirebaseAuthClient _authClient;
 
-        public CurrentUserAuthHttpMessageHandler(FirebaseAuthClient authClient)
+        public CurrentUserAuthHttpMessageHandler(IFirebaseAuthClient authClient)
         {
             _authClient = authClient;
         }

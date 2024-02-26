@@ -14,7 +14,7 @@ namespace Streakathon.MAUI.Pages
     public partial class StreakDetailsViewModel : ObservableObject
     {
         private readonly StreakStore _streakStore;
-        private readonly FirebaseAuthClient _authClient;
+        private readonly IFirebaseAuthClient _authClient;
 
         private string _id;
         public string Id
@@ -42,7 +42,7 @@ namespace Streakathon.MAUI.Pages
         [ObservableProperty]
         private bool _isLoading;
 
-        public StreakDetailsViewModel(StreakStore streakStore, FirebaseAuthClient authClient)
+        public StreakDetailsViewModel(StreakStore streakStore, IFirebaseAuthClient authClient)
         {
             _streakStore = streakStore;
             _authClient = authClient;
