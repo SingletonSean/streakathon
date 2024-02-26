@@ -6,7 +6,7 @@ namespace Streakathon.MAUI.Pages
 {
     public partial class SignUpViewModel : ObservableObject
     {
-        private readonly FirebaseAuthClient _authClient;
+        private readonly IFirebaseAuthClient _authClient;
 
         [ObservableProperty]
         private string _email;
@@ -20,7 +20,7 @@ namespace Streakathon.MAUI.Pages
         [ObservableProperty]
         private bool _isLoading;
 
-        public SignUpViewModel(FirebaseAuthClient authClient)
+        public SignUpViewModel(IFirebaseAuthClient authClient)
         {
             _authClient = authClient;
         }

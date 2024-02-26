@@ -12,7 +12,7 @@ namespace Streakathon.MAUI.Pages
     public partial class HomeViewModel : ObservableValidator
     {
         private readonly StreakStore _streakStore;
-        private readonly FirebaseAuthClient _authClient;
+        private readonly IFirebaseAuthClient _authClient;
 
         private readonly ObservableCollection<StreakOverviewViewModel> _streakOverviewViewModels;
 
@@ -23,7 +23,7 @@ namespace Streakathon.MAUI.Pages
 
         public bool HasStreaks => StreakOverviewViewModels.Count() > 0;
 
-        public HomeViewModel(StreakStore streakStore, FirebaseAuthClient authClient)
+        public HomeViewModel(StreakStore streakStore, IFirebaseAuthClient authClient)
         {
             _streakStore = streakStore;
             _authClient = authClient;
@@ -44,7 +44,7 @@ namespace Streakathon.MAUI.Pages
 
             try
             {
-                await _streakStore.Load(_authClient.User.Uid);
+                await _streakStore.Load(_authClient?.User?.Uid ?? "");
 
                 UpdateStreaks();
             } 

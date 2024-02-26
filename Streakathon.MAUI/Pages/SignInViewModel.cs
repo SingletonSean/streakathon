@@ -7,7 +7,7 @@ namespace Streakathon.MAUI.Pages
 {
     public partial class SignInViewModel : ObservableObject
     {
-        private readonly FirebaseAuthClient _authClient;
+        private readonly IFirebaseAuthClient _authClient;
         private readonly ILogger<SignInViewModel> _logger;
 
         [ObservableProperty]
@@ -19,7 +19,7 @@ namespace Streakathon.MAUI.Pages
         [ObservableProperty]
         private bool _isLoading;
 
-        public SignInViewModel(FirebaseAuthClient authClient, ILogger<SignInViewModel> logger)
+        public SignInViewModel(IFirebaseAuthClient authClient, ILogger<SignInViewModel> logger)
         {
             _authClient = authClient;
             _logger = logger;

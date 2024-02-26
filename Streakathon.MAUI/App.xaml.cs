@@ -4,9 +4,9 @@ namespace Streakathon.MAUI;
 
 public partial class App : Application
 {
-    private readonly FirebaseAuthClient _authClient;
+    private readonly IFirebaseAuthClient _authClient;
 
-    public App(FirebaseAuthClient authClient)
+    public App(IFirebaseAuthClient authClient)
 	{
         _authClient = authClient;
 
