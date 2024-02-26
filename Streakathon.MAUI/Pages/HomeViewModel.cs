@@ -3,9 +3,9 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Firebase.Auth;
 using Streakathon.MAUI.Entities.Streaks;
+using Streakathon.MAUI.Shared.Shells;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
 
 namespace Streakathon.MAUI.Pages
 {
@@ -13,6 +13,7 @@ namespace Streakathon.MAUI.Pages
     {
         private readonly StreakStore _streakStore;
         private readonly IFirebaseAuthClient _authClient;
+        private readonly IShell _shell;
 
         private readonly ObservableCollection<StreakOverviewViewModel> _streakOverviewViewModels;
 
@@ -23,7 +24,9 @@ namespace Streakathon.MAUI.Pages
 
         public bool HasStreaks => StreakOverviewViewModels.Count() > 0;
 
-        public HomeViewModel(StreakStore streakStore, IFirebaseAuthClient authClient)
+        public HomeViewModel(
+            StreakStore streakStore, 
+            IFirebaseAuthClient authClient)
         {
             _streakStore = streakStore;
             _authClient = authClient;
@@ -50,7 +53,7 @@ namespace Streakathon.MAUI.Pages
             } 
             catch (Exception)
             {
-                await Shell.Current.DisplayAlert("Error", "Failed to load streaks. Please try again later.", "Ok");
+                await _shell.DisplayAlert("Error", "Failed to load streaks. Please try again later.", "Ok");
             } 
             finally
             {
@@ -61,7 +64,7 @@ namespace Streakathon.MAUI.Pages
         [RelayCommand]
         private async Task AddStreak()
         {
-            await Shell.Current.GoToAsync("New");
+            await _shell.GoToAsync("New");
         }
 
         [RelayCommand]
@@ -69,7 +72,7 @@ namespace Streakathon.MAUI.Pages
         {
             _authClient.SignOut();
 
-            await Shell.Current.GoToAsync("//SignIn");
+            await _shell.GoToAsync("//SignIn");
         }
 
         private void UpdateStreaks()
