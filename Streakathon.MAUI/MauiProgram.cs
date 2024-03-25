@@ -9,6 +9,7 @@ using Streakathon.MAUI.Entities.Users;
 using Streakathon.MAUI.Pages;
 using Serilog;
 using Firebase.Auth.Repository;
+using Streakathon.MAUI.Shared.Shells;
 
 namespace Streakathon.MAUI;
 
@@ -33,11 +34,18 @@ public static class MauiProgram
 
         IServiceCollection services = builder.Services;
 
-        services.AddSerilog(
+        services.AddStreakathon(
             new LoggerConfiguration()
                 .WriteTo.Debug()
                 .WriteTo.File(Path.Combine(FileSystem.Current.AppDataDirectory, "logs", "log.txt"), rollingInterval: RollingInterval.Day)
                 .CreateLogger());
+
+        return builder.Build();
+	}
+
+    public static IServiceCollection AddStreakathon(this IServiceCollection services, Serilog.ILogger logger)
+    {
+        services.AddSerilog(logger);
 
         services.AddSingleton<IFirebaseAuthClient>(new FirebaseAuthClient(new FirebaseAuthConfig()
         {
@@ -50,13 +58,13 @@ public static class MauiProgram
             UserRepository = new FileUserRepository("Streakathon")
         }));
 
-		services.AddSingleton<GetAllStreaksQuery>();
-		services.AddSingleton<CreateStreakCommand>();
-		services.AddSingleton<CreateStreakEntryCommand>();
+        services.AddSingleton<GetAllStreaksQuery>();
+        services.AddSingleton<CreateStreakCommand>();
+        services.AddSingleton<CreateStreakEntryCommand>();
         services.AddSingleton<StreakStore>();
 
         services.AddTransient<HomeViewModel>();
-		services.AddTransient<HomeView>();
+        services.AddTransient<HomeView>();
 
         services.AddTransient<AddStreakViewModel>();
         services.AddTransient<AddStreakView>();
@@ -73,8 +81,8 @@ public static class MauiProgram
         services.AddTransient<CurrentUserAuthHttpMessageHandler>();
 
         services.AddRefitClient<IGetAllStreaksQuery>().ConfigureHttpClient(c =>
-		{
-			c.BaseAddress = new Uri("https://firestore.googleapis.com/v1/projects/streakathon/databases/(default)");
+        {
+            c.BaseAddress = new Uri("https://firestore.googleapis.com/v1/projects/streakathon/databases/(default)");
         }).AddHttpMessageHandler<CurrentUserAuthHttpMessageHandler>();
 
         services.AddRefitClient<IGetAllStreakEntriesQuery>().ConfigureHttpClient(c =>
@@ -91,7 +99,9 @@ public static class MauiProgram
         {
             c.BaseAddress = new Uri("https://firestore.googleapis.com/v1/projects/streakathon/databases/(default)/documents");
         }).AddHttpMessageHandler<CurrentUserAuthHttpMessageHandler>();
+        
+        services.AddSingleton<IShell, MauiShell>();
 
-        return builder.Build();
-	}
+        return services;
+    }
 }

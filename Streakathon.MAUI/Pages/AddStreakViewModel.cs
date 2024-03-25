@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Firebase.Auth;
 using Streakathon.MAUI.Entities.Streaks;
+using Streakathon.MAUI.Shared.Shells;
 
 namespace Streakathon.MAUI.Pages
 {
@@ -9,6 +10,7 @@ namespace Streakathon.MAUI.Pages
     {
         private readonly StreakStore _streakStore;
         private readonly IFirebaseAuthClient _authClient;
+        private readonly IShell _shell;
 
         [ObservableProperty]
         private string _title;
@@ -19,10 +21,11 @@ namespace Streakathon.MAUI.Pages
         [ObservableProperty]
         private bool _isLoading;
 
-        public AddStreakViewModel(StreakStore streakStore, IFirebaseAuthClient authClient)
+        public AddStreakViewModel(StreakStore streakStore, IFirebaseAuthClient authClient, IShell shell)
         {
             _streakStore = streakStore;
             _authClient = authClient;
+            _shell = shell;
         }
 
         [RelayCommand]
@@ -35,14 +38,14 @@ namespace Streakathon.MAUI.Pages
                 NewStreak streak = new NewStreak(Title, Description, _authClient?.User?.Uid ?? "");
                 await _streakStore.Create(streak);
 
-                await Shell.Current.GoToAsync("//Streaks");
+                await _shell.GoToAsync("//Streaks");
 
                 Title = string.Empty;
                 Description = string.Empty;
             } 
             catch (Exception)
             {
-                await Shell.Current.DisplayAlert("Error", "Failed to create streak. Please try again later.", "Ok");
+                await _shell.DisplayAlert("Error", "Failed to create streak. Please try again later.", "Ok");
             } 
             finally
             {
